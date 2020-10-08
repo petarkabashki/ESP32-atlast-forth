@@ -192,8 +192,15 @@ static void atlast_task(void *arg)
         printf("\n");
         atl_eval(line);
         printf("\n");
+        vTaskDelay(10);
     }
 }
+
+/*
+
+text oled.clear oled.drawstr oled.send ;
+
+*/
 
 extern void app_main(void)
 {
@@ -205,7 +212,7 @@ extern void app_main(void)
     atl_primdef(crypto_fcns);
     atl_primdef(u8g2_fcns);
 
-    // task_SSD1306i2c(NULL);
+    task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);
 
     int a = 0;
@@ -214,6 +221,7 @@ extern void app_main(void)
         a++;
 
         atlast_task(NULL);
+        
     }
     // xTaskCreate(atlast_task, "atlast_task", 512, NULL, 10, NULL);
 }
