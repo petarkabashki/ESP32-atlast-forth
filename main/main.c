@@ -26,6 +26,7 @@
 #include "atlast.h"
 #include "crypto_atl.h"
 #include "u8g2_atl.h"
+#include "system_atl.h"
 
 #include <u8g2.h>
 
@@ -198,7 +199,7 @@ static void atlast_task(void *arg)
 
 /*
 
-text oled.clear oled.drawstr oled.send ;
+: text oled.clear 0 25 rot oled.drawstr oled.send ;
 
 */
 
@@ -211,6 +212,7 @@ extern void app_main(void)
     atl_init();
     atl_primdef(crypto_fcns);
     atl_primdef(u8g2_fcns);
+    atl_primdef(system_fcns);
 
     task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);
