@@ -142,11 +142,7 @@ void task_SSD1306i2c(void *ignore)
 
 // #define BUF_SIZE (1024)
 
-/*
 
-: text oled.clear 0 25 rot oled.drawstr oled.send ;
-
-*/
 
 static void initialize_console(void)
 {
@@ -225,7 +221,7 @@ extern void app_main(void)
     atl_primdef(nvs_fcns);
     // // atl_primdef(twofish2_fcns);
 
-    // task_SSD1306i2c(NULL);
+    task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);
     const char *prompt = LOG_COLOR_I PROMPT_STR LOG_RESET_COLOR;
 
