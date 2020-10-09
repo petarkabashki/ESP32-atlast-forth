@@ -131,10 +131,10 @@ prim P_nvs_get()
 	Hpc(S2);
 	Hpc(S3);
 
+	const char *dest = (const char *)S3;
 	const char *current_namespace = (const char *)S2;
 	const char *str_type = (const char *)S1;
 	const char *key = (const char *)S0;
-	const char *dest = (const char *)S3;
 
 
 	nvs_handle_t nvs;
@@ -264,7 +264,7 @@ prim P_nvs_get()
 
 	nvs_close(nvs);
 	// return err;
-
+	Npop(4);
 
 }
 

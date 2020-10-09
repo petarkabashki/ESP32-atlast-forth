@@ -62,11 +62,11 @@
 #define SHORTCUTA /* Shortcut integer arithmetic words */
 #define SHORTCUTC /* Shortcut integer comparison */
 #define STRING    /* String functions */
-//#define SYSTEM			      /* System command function */
+#define SYSTEM			      /* System command function */
 #ifndef NOMEMCHECK
 // #define TRACE			      /* Execution tracing */
 #define WALKBACK /* Walkback trace */
-//#define WORDSUSED		      /* Logging of words used and unused */
+// #define WORDSUSED		      /* Logging of words used and unused */
 #endif /* NOMEMCHECK */
 #endif /* !INDIVIDUALLY */
 
@@ -131,10 +131,10 @@ typedef enum
 
 /*  Globals visible to calling programs  */
 
-atl_int atl_stklen = 100;    /* Evaluation stack length */
+atl_int atl_stklen = 300;    /* Evaluation stack length */
 atl_int atl_rstklen = 100;   /* Return stack length */
-atl_int atl_heaplen = 20000; /* Heap length */
-atl_int atl_ltempstr = 128;  /* Temporary string buffer length */
+atl_int atl_heaplen = 4000; /* Heap length */
+atl_int atl_ltempstr = 1024;  /* Temporary string buffer length */
 atl_int atl_ntempstr = 4;    /* Number of temporary string buffers */
 
 atl_int atl_trace = Truth;     /* Tracing if true */
