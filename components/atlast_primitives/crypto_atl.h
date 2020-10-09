@@ -6,3 +6,11 @@
 extern struct primfcn crypto_fcns[];
 
 #endif
+
+/*
+
+variable s here 1000 + s !
+
+s 256 mne.gen
+
+*/

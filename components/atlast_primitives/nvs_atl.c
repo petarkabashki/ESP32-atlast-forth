@@ -125,14 +125,16 @@ static int list(const char *part, const char *name, const char *str_type)
 
 prim P_nvs_get()
 { /* strength dest -- */
-	Sl(3);
+	Sl(4);
 	Hpc(S0);
 	Hpc(S1);
 	Hpc(S2);
+	Hpc(S3);
 
 	const char *current_namespace = (const char *)S2;
 	const char *str_type = (const char *)S1;
 	const char *key = (const char *)S0;
+	const char *dest = (const char *)S3;
 
 
 	nvs_handle_t nvs;
@@ -232,17 +234,17 @@ prim P_nvs_get()
 		size_t len;
 		if ((err = nvs_get_str(nvs, key, NULL, &len)) == ESP_OK)
 		{
-			char *str = (char *)malloc(len);
+			// char *str = (char *)malloc(len);
 			// Sl(1);
 			// Ho((S0 + 1 + sizeof(stackitem)) / sizeof(stackitem));
 			// P_create(); /* Create variable */
 			// /* Allocate storage for string */
 			// hptr += (S0 + 1 + sizeof(stackitem)) / sizeof(stackitem);
-			if ((err = nvs_get_str(nvs, key, (char *)S0, &len)) == ESP_OK)
+			if ((err = nvs_get_str(nvs, key, (char *)dest, &len)) == ESP_OK)
 			{
-				printf("%s\n", (char *)str);
+				printf("%s\n", (char *)dest);
 			}
-			free(str);
+			// free(str);
 		}
 	}
 	// else if (type == NVS_TYPE_BLOB)

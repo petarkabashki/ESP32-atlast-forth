@@ -30,13 +30,13 @@ prim P_twofish2_crypt(/*int mode, int keySize, char* in, char* cf*/) /* keySize 
 {																			 /* return 0 iff test passes */
 	Sl(5);
 	Hpc(S0);
-	Hpc(S1);
+	Hpc(S4);
 
-	int mode = S3;
-	int keySize = S2;
-	char* in = (char*)S0;
-	char* keyMaterial = (char*)S1;
-	int dir_encrypt = S4;
+	char* in = (char*)S4;
+	int dir_encrypt = S3;
+	int mode = S2;
+	int keySize = S1;
+	char* keyMaterial = (char*)S0;
 
 	twofish2_crypt(mode, keySize, in, keyMaterial, dir_encrypt);
 
@@ -45,5 +45,5 @@ prim P_twofish2_crypt(/*int mode, int keySize, char* in, char* cf*/) /* keySize 
 
 
 struct primfcn twofish2_fcns[] = {
-		{"02FISH.crypt", P_twofish2_crypt},
+		{"0FISH2.crypt", P_twofish2_crypt},
 		{NULL, (codeptr)0}};

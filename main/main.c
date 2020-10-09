@@ -28,7 +28,7 @@
 #include "u8g2_atl.h"
 #include "system_atl.h"
 #include "nvs_atl.h"
-// #include "twofish2_atl.h"
+#include "twofish2_atl.h"
 
 #include <u8g2.h>
 

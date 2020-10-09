@@ -45,27 +45,27 @@
     defined.  Otherwise, we automatically enable all the subpackages.  */
 
 #ifndef INDIVIDUALLY
-#define ARRAY			      /* Array subscripting words */
-#define BREAK			      /* Asynchronous break facility */
-#define COMPILERW		      /* Compiler-writing words */
-#define CONIO			      /* Interactive console I/O */
-#define DEFFIELDS		      /* Definition field access for words */
-#define DOUBLE			      /* Double word primitives (2DUP) */
-#define EVALUATE		      /* The EVALUATE primitive */
+#define ARRAY     /* Array subscripting words */
+#define BREAK     /* Asynchronous break facility */
+#define COMPILERW /* Compiler-writing words */
+#define CONIO     /* Interactive console I/O */
+#define DEFFIELDS /* Definition field access for words */
+#define DOUBLE    /* Double word primitives (2DUP) */
+#define EVALUATE  /* The EVALUATE primitive */
 //commented out by petar
-#define FILEIO			      /* File I/O primitives */
-#define MATH			      /* Math functions */
-#define MEMMESSAGE		      /* Print message for stack/heap errors */
-#define PROLOGUE		      /* Prologue processing and auto-init */
+#define FILEIO     /* File I/O primitives */
+#define MATH       /* Math functions */
+#define MEMMESSAGE /* Print message for stack/heap errors */
+#define PROLOGUE   /* Prologue processing and auto-init */
 #define PROLOGUEDEBUG
-#define REAL			      /* Floating point numbers */
-#define SHORTCUTA		      /* Shortcut integer arithmetic words */
-#define SHORTCUTC		      /* Shortcut integer comparison */
-#define STRING			      /* String functions */
+#define REAL      /* Floating point numbers */
+#define SHORTCUTA /* Shortcut integer arithmetic words */
+#define SHORTCUTC /* Shortcut integer comparison */
+#define STRING    /* String functions */
 //#define SYSTEM			      /* System command function */
 #ifndef NOMEMCHECK
 // #define TRACE			      /* Execution tracing */
-#define WALKBACK		      /* Walkback trace */
+#define WALKBACK /* Walkback trace */
 //#define WORDSUSED		      /* Logging of words used and unused */
 #endif /* NOMEMCHECK */
 #endif /* !INDIVIDUALLY */
@@ -96,22 +96,26 @@
 #ifdef abs
 #undef abs
 #endif
-#define abs(x)	 ((x) < 0    ? -(x) : (x))
-#define max(a,b) ((a) >  (b) ?	(a) : (b))
-#define min(a,b) ((a) <= (b) ?	(a) : (b))
+#define abs(x) ((x) < 0 ? -(x) : (x))
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) <= (b) ? (a) : (b))
 
 /*  Globals imported  */
 
 /*  Data types	*/
 
-typedef enum {False = 0, True = 1} Boolean;
+typedef enum
+{
+    False = 0,
+    True = 1
+} Boolean;
 
-#define EOS     '\0'                  /* End of string characters */
+#define EOS '\0' /* End of string characters */
 
-#define V	(void)		      /* Force result to void */
+#define V (void)/* Force result to void */
 
-#define Truth	-1L		      /* Stack value for truth */
-#define Falsity 0L		      /* Stack value for falsity */
+#define Truth -1L  /* Stack value for truth */
+#define Falsity 0L /* Stack value for falsity */
 
 /* Utility definition to get an  array's  element  count  (at  compile
    time).   For  example:
@@ -123,67 +127,67 @@ typedef enum {False = 0, True = 1} Boolean;
    would print a five.  ELEMENTS("abc") can also be used to  tell  how
    many  bytes are in a string constant INCLUDING THE TRAILING NULL. */
 
-#define ELEMENTS(array) (sizeof(array)/sizeof((array)[0]))
+#define ELEMENTS(array) (sizeof(array) / sizeof((array)[0]))
 
 /*  Globals visible to calling programs  */
 
-atl_int atl_stklen = 100;	      /* Evaluation stack length */
-atl_int atl_rstklen = 100;	      /* Return stack length */
-atl_int atl_heaplen = 2000;	      /* Heap length */
-atl_int atl_ltempstr = 256;	      /* Temporary string buffer length */
-atl_int atl_ntempstr = 4;	      /* Number of temporary string buffers */
+atl_int atl_stklen = 100;    /* Evaluation stack length */
+atl_int atl_rstklen = 100;   /* Return stack length */
+atl_int atl_heaplen = 20000; /* Heap length */
+atl_int atl_ltempstr = 128;  /* Temporary string buffer length */
+atl_int atl_ntempstr = 4;    /* Number of temporary string buffers */
 
-atl_int atl_trace = Truth;	      /* Tracing if true */
-atl_int atl_walkback = Truth;	      /* Walkback enabled if true */
-atl_int atl_comment = Falsity;	      /* Currently ignoring a comment */
-atl_int atl_redef = Truth;	      /* Allow redefinition without issuing
+atl_int atl_trace = Truth;     /* Tracing if true */
+atl_int atl_walkback = Truth;  /* Walkback enabled if true */
+atl_int atl_comment = Falsity; /* Currently ignoring a comment */
+atl_int atl_redef = Truth;     /* Allow redefinition without issuing
                                          the "not unique" message. */
-atl_int atl_errline = 0;	      /* Line where last atl_load failed */
+atl_int atl_errline = 0;       /* Line where last atl_load failed */
 
 /*  Local variables  */
 
-    /* The evaluation stack */
+/* The evaluation stack */
 
-Exported stackitem *stack = NULL;     /* Evaluation stack */
-Exported stackitem *stk;	      /* Stack pointer */
-Exported stackitem *stackbot;	      /* Stack bottom */
-Exported stackitem *stacktop;	      /* Stack top */
+Exported stackitem *stack = NULL; /* Evaluation stack */
+Exported stackitem *stk;          /* Stack pointer */
+Exported stackitem *stackbot;     /* Stack bottom */
+Exported stackitem *stacktop;     /* Stack top */
 
-    /* The return stack */
+/* The return stack */
 
-Exported dictword ***rstack = NULL;   /* Return stack */
-Exported dictword ***rstk;	      /* Return stack pointer */
-Exported dictword ***rstackbot;       /* Return stack bottom */
-Exported dictword ***rstacktop;       /* Return stack top */
+Exported dictword ***rstack = NULL; /* Return stack */
+Exported dictword ***rstk;          /* Return stack pointer */
+Exported dictword ***rstackbot;     /* Return stack bottom */
+Exported dictword ***rstacktop;     /* Return stack top */
 
-    /* The heap */
+/* The heap */
 
-Exported stackitem *heap = NULL;      /* Allocation heap */
-Exported stackitem *hptr;	      /* Heap allocation pointer */
-Exported stackitem *heapbot;	      /* Bottom of heap (temp string buffer) */
-Exported stackitem *heaptop;	      /* Top of heap */
+Exported stackitem *heap = NULL; /* Allocation heap */
+Exported stackitem *hptr;        /* Heap allocation pointer */
+Exported stackitem *heapbot;     /* Bottom of heap (temp string buffer) */
+Exported stackitem *heaptop;     /* Top of heap */
 
-    /* The dictionary */
+/* The dictionary */
 
-Exported dictword *dict = NULL;       /* Dictionary chain head */
-Exported dictword *dictprot = NULL;   /* First protected item in dictionary */
+Exported dictword *dict = NULL;     /* Dictionary chain head */
+Exported dictword *dictprot = NULL; /* First protected item in dictionary */
 
-    /* The temporary string buffers */
+/* The temporary string buffers */
 
-Exported char **strbuf = NULL;	      /* Table of pointers to temp strings */
-Exported int cstrbuf = 0;	      /* Current temp string */
+Exported char **strbuf = NULL; /* Table of pointers to temp strings */
+Exported int cstrbuf = 0;      /* Current temp string */
 
-    /* The walkback trace stack */
+/* The walkback trace stack */
 
 #ifdef WALKBACK
-static dictword **wback = NULL;       /* Walkback trace buffer */
-static dictword **wbptr;	      /* Walkback trace pointer */
-#endif /* WALKBACK */
+static dictword **wback = NULL; /* Walkback trace buffer */
+static dictword **wbptr;        /* Walkback trace pointer */
+#endif                          /* WALKBACK */
 
 #ifdef MEMSTAT
-Exported stackitem *stackmax;	      /* Stack maximum excursion */
-Exported dictword ***rstackmax;       /* Return stack maximum excursion */
-Exported stackitem *heapmax;	      /* Heap maximum excursion */
+Exported stackitem *stackmax;   /* Stack maximum excursion */
+Exported dictword ***rstackmax; /* Return stack maximum excursion */
+Exported stackitem *heapmax;    /* Heap maximum excursion */
 #endif
 
 #ifdef FILEIO
@@ -192,34 +196,35 @@ static char *fopenmodes[] = {
 #define FMspecial
     /* Fopen() mode table for systems that require a "b" in the
        mode string for binary files. */
-    "", "r",  "",   "r+",
-    "", "rb", "",   "r+b",
-    "", "",   "w",  "w+",
-    "", "",   "wb", "w+b"
+    "", "r", "", "r+",
+    "", "rb", "", "r+b",
+    "", "", "w", "w+",
+    "", "", "wb", "w+b"
 #endif
 #ifndef FMspecial
-    /* Default fopen() mode table for SVID-compatible systems not
+                  /* Default fopen() mode table for SVID-compatible systems not
        overridden by a special table above. */
-    "", "r",  "",   "r+",
-    "", "r",  "",   "r+",
-    "", "",   "w",  "w+",
-    "", "",   "w",  "w+"
+                  "",
+    "r", "", "r+",
+    "", "r", "", "r+",
+    "", "", "w", "w+",
+    "", "", "w", "w+"
 #endif
 };
 
 #endif /* FILEIO */
 
-static char tokbuf[256];	      /* Token buffer */
-static char *instream = NULL;	      /* Current input stream line */
-static long tokint;		      /* Scanned integer */
+static char tokbuf[256];      /* Token buffer */
+static char *instream = NULL; /* Current input stream line */
+static long tokint;           /* Scanned integer */
 #ifdef REAL
-static atl_real tokreal;	      /* Scanned real number */
+static atl_real tokreal; /* Scanned real number */
 #ifdef ALIGNMENT
 Exported atl_real rbuf0, rbuf1, rbuf2; /* Real temporary buffers */
 #endif
 #endif
-static long base = 10;		      /* Number base */
-Exported dictword **ip = NULL;	      /* Instruction pointer */
+static long base = 10;                /* Number base */
+Exported dictword **ip = NULL;        /* Instruction pointer */
 Exported dictword *curword = NULL;    /* Current word being executed */
 static int evalstat = ATL_SNORM;      /* Evaluator status */
 static Boolean defpend = False;       /* Token definition pending */
@@ -230,7 +235,7 @@ static Boolean cbrackpend = False;    /* [COMPILE] pending */
 Exported dictword *createword = NULL; /* Address of word pending creation */
 static Boolean stringlit = False;     /* String literal anticipated */
 #ifdef BREAK
-static Boolean broken = False;	      /* Asynchronous break received */
+static Boolean broken = False; /* Asynchronous break received */
 #endif
 
 #ifdef COPYRIGHT
@@ -239,7 +244,7 @@ static Boolean broken = False;	      /* Asynchronous break received */
 static
 #endif
 #endif
-       char copyright[] = "ATLAST: This program is in the public domain.";
+    char copyright[] = "ATLAST: This program is in the public domain.";
 #endif
 
 /* The following static cells save the compile addresses of words
@@ -250,8 +255,8 @@ static
    one of the words generated by the compiler.	*/
 
 static stackitem s_exit, s_lit, s_flit, s_strlit, s_dotparen,
-		 s_qbranch, s_branch, s_xdo, s_xqdo, s_xloop,
-		 s_pxloop, s_abortq;
+    s_qbranch, s_branch, s_xdo, s_xqdo, s_xloop,
+    s_pxloop, s_abortq;
 
 /*  Forward functions  */
 
@@ -265,220 +270,249 @@ STATIC void pwalkback();
 
 /*  ALLOC  --  Allocate memory and error upon exhaustion.  */
 
-static char *alloc(size)
-  unsigned int size;
+static char *alloc(size) unsigned int size;
 {
     char *cp = malloc(size);
 
-/* printf("\nAlloc %u", size); */
-    if (cp == NULL) {
+    /* printf("\nAlloc %u", size); */
+    if (cp == NULL)
+    {
         V fprintf(stderr, "\n\nOut of memory!  %u bytes requested.\n", size);
-	abort();
+        abort();
     }
     return cp;
 }
 
 /*  UCASE  --  Force letters in string to upper case.  */
 
-static void ucase(c)
-  char *c;
+static void ucase(c) char *c;
 {
     char ch;
 
-    while ((ch = *c) != EOS) {
-	if (islower(ch))
-	    *c = toupper(ch);
-	c++;
+    while ((ch = *c) != EOS)
+    {
+        if (islower(ch))
+            *c = toupper(ch);
+        c++;
     }
 }
 
 /*  TOKEN  --  Scan a token and return its type.  */
 
-static int token(cp)
-  char **cp;
+static int token(cp) char **cp;
 {
     char *sp = *cp;
 
-    while (True) {
-	char *tp = tokbuf;
-	int tl = 0;
-	Boolean istring = False, rstring = False;
+    while (True)
+    {
+        char *tp = tokbuf;
+        int tl = 0;
+        Boolean istring = False, rstring = False;
 
-	if (atl_comment) {
-            while (*sp != ')') {
-		if (*sp == EOS) {
-		    *cp = sp;
-		    return TokNull;
-		}
-		sp++;
-	    }
-	    sp++;
-	    atl_comment = Falsity;
-	}
+        if (atl_comment)
+        {
+            while (*sp != ')')
+            {
+                if (*sp == EOS)
+                {
+                    *cp = sp;
+                    return TokNull;
+                }
+                sp++;
+            }
+            sp++;
+            atl_comment = Falsity;
+        }
 
-	while (isspace(*sp))		  /* Skip leading blanks */
-	    sp++;
+        while (isspace(*sp)) /* Skip leading blanks */
+            sp++;
 
-        if (*sp == '"') {                 /* Is this a string ? */
+        if (*sp == '"')
+        { /* Is this a string ? */
 
-	    /* Assemble string token. */
+            /* Assemble string token. */
 
-	    sp++;
-	    while (True) {
-		char c = *sp++;
+            sp++;
+            while (True)
+            {
+                char c = *sp++;
 
-                if (c == '"') {
-		    sp++;
-		    *tp++ = EOS;
-		    break;
-		} else if (c == EOS) {
-		    rstring = True;
-		    *tp++ = EOS;
-		    break;
-		}
-                if (c == '\\') {
-		    c = *sp++;
-		    if (c == EOS) {
-			rstring = True;
-			break;
-		    }
-		    switch (c) {
-                        case 'b':
-                            c = '\b';
-			    break;
-                        case 'n':
-                            c = '\n';
-			    break;
-                        case 'r':
-                            c = '\r';
-			    break;
-                        case 't':
-                            c = '\t';
-			    break;
-			default:
-			    break;
-		    }
-		}
-		if (tl < (sizeof tokbuf) - 1) {
-		   *tp++ = c;
-		   tl++;
-		} else {
-		    rstring = True;
-		}
-	    }
-	    istring = True;
-	} else {
+                if (c == '"')
+                {
+                    sp++;
+                    *tp++ = EOS;
+                    break;
+                }
+                else if (c == EOS)
+                {
+                    rstring = True;
+                    *tp++ = EOS;
+                    break;
+                }
+                if (c == '\\')
+                {
+                    c = *sp++;
+                    if (c == EOS)
+                    {
+                        rstring = True;
+                        break;
+                    }
+                    switch (c)
+                    {
+                    case 'b':
+                        c = '\b';
+                        break;
+                    case 'n':
+                        c = '\n';
+                        break;
+                    case 'r':
+                        c = '\r';
+                        break;
+                    case 't':
+                        c = '\t';
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                if (tl < (sizeof tokbuf) - 1)
+                {
+                    *tp++ = c;
+                    tl++;
+                }
+                else
+                {
+                    rstring = True;
+                }
+            }
+            istring = True;
+        }
+        else
+        {
 
-	    /* Scan the next raw token */
+            /* Scan the next raw token */
 
-	    while (True) {
-		char c = *sp++;
+            while (True)
+            {
+                char c = *sp++;
 
-		if (c == EOS || isspace(c)) {
-		    *tp++ = EOS;
-		    break;
-		}
-		if (tl < (sizeof tokbuf) - 1) {
-		    *tp++ = c;
-		    tl++;
-		}
-	    }
-	}
-	*cp = --sp;			  /* Store end of scan pointer */
+                if (c == EOS || isspace(c))
+                {
+                    *tp++ = EOS;
+                    break;
+                }
+                if (tl < (sizeof tokbuf) - 1)
+                {
+                    *tp++ = c;
+                    tl++;
+                }
+            }
+        }
+        *cp = --sp; /* Store end of scan pointer */
 
-	if (istring) {
-	    if (rstring) {
+        if (istring)
+        {
+            if (rstring)
+            {
 #ifdef MEMMESSAGE
                 V printf("\nRunaway string: %s\n", tokbuf);
 #endif
-		evalstat = ATL_RUNSTRING;
-		return TokNull;
-	    }
-	    return TokString;
-	}
+                evalstat = ATL_RUNSTRING;
+                return TokNull;
+            }
+            return TokString;
+        }
 
-	if (tokbuf[0] == EOS)
-	    return TokNull;
+        if (tokbuf[0] == EOS)
+            return TokNull;
 
-	/* See if token is a comment to end of line character.	If so, discard
+        /* See if token is a comment to end of line character.	If so, discard
 	   the rest of the line and return null for this token request. */
 
-        if (strcmp(tokbuf, "\\") == 0) {
-	    while (*sp != EOS)
-		sp++;
-	    *cp = sp;
-	    return TokNull;
-	}
+        if (strcmp(tokbuf, "\\") == 0)
+        {
+            while (*sp != EOS)
+                sp++;
+            *cp = sp;
+            return TokNull;
+        }
 
-	/* See if this token is a comment open delimiter.  If so, set to
+        /* See if this token is a comment open delimiter.  If so, set to
 	   ignore all characters until the matching comment close delimiter. */
 
-        if (strcmp(tokbuf, "(") == 0) {
-	    while (*sp != EOS) {
+        if (strcmp(tokbuf, "(") == 0)
+        {
+            while (*sp != EOS)
+            {
                 if (*sp == ')')
-		    break;
-		sp++;
-	    }
-            if (*sp == ')') {
-		sp++;
-		continue;
-	    }
-	    atl_comment = Truth;
-	    *cp = sp;
-	    return TokNull;
-	}
+                    break;
+                sp++;
+            }
+            if (*sp == ')')
+            {
+                sp++;
+                continue;
+            }
+            atl_comment = Truth;
+            *cp = sp;
+            return TokNull;
+        }
 
-	/* See if the token is a number. */
+        /* See if the token is a number. */
 
-        if (isdigit(tokbuf[0]) || tokbuf[0] == '-') {
-	    char tc;
-	    char *tcp;
+        if (isdigit(tokbuf[0]) || tokbuf[0] == '-')
+        {
+            char tc;
+            char *tcp;
 
 #ifdef OS2
-	    /* Compensate for error in OS/2 sscanf() library function */
+            /* Compensate for error in OS/2 sscanf() library function */
             if ((tokbuf[0] == '-') &&
-		!(isdigit(tokbuf[1]) ||
-                    (((tokbuf[1] == 'x') || (tokbuf[1] == 'X')) &&
-			isxdigit(tokbuf[2])))) {
-		return TokWord;
-	    }
+                !(isdigit(tokbuf[1]) ||
+                  (((tokbuf[1] == 'x') || (tokbuf[1] == 'X')) &&
+                   isxdigit(tokbuf[2]))))
+            {
+                return TokWord;
+            }
 #endif /* OS2 */
 #ifdef USE_SSCANF
             if (sscanf(tokbuf, "%li%c", &tokint, &tc) == 1)
-		return TokInt;
+                return TokInt;
 #else
-    	    tokint = strtoul(tokbuf, &tcp, 0);
-	    if (*tcp == 0) {
-	    	return TokInt;
-	    }
+            tokint = strtoul(tokbuf, &tcp, 0);
+            if (*tcp == 0)
+            {
+                return TokInt;
+            }
 #endif
 #ifdef REAL
             if (sscanf(tokbuf, "%lf%c", &tokreal, &tc) == 1)
-		return TokReal;
+                return TokReal;
 #endif
-	}
-	return TokWord;
+        }
+        return TokWord;
     }
 }
 
 /*  LOOKUP  --	Look up token in the dictionary.  */
 
-static dictword *lookup(tkname)
-  char *tkname;
+static dictword *lookup(tkname) char *tkname;
 {
     dictword *dw = dict;
 
-    ucase(tkname);		      /* Force name to upper case */
-    while (dw != NULL) {
-	if (!(dw->wname[0] & WORDHIDDEN) &&
-	     (strcmp(dw->wname + 1, tkname) == 0)) {
+    ucase(tkname); /* Force name to upper case */
+    while (dw != NULL)
+    {
+        if (!(dw->wname[0] & WORDHIDDEN) &&
+            (strcmp(dw->wname + 1, tkname) == 0))
+        {
 #ifdef WORDSUSED
-	    // *(dw->wname) |= WORDUSED; /* Mark this word used */
-	    (dw->wname)[0] |= WORDUSED; /* Mark this word used */
+            // *(dw->wname) |= WORDUSED; /* Mark this word used */
+            (dw->wname)[0] |= WORDUSED; /* Mark this word used */
 #endif
-	    break;
-	}
-	dw = dw->wnext;
+            break;
+        }
+        dw = dw->wnext;
     }
     return dw;
 }
@@ -508,37 +542,40 @@ static dictword *lookup(tkname)
 		    of line character is stored in the string buffer.
 		    */
 
-Exported char *atl_fgetsp(s, n, stream)
-  char *s;
-  int n;
-  FILE *stream;
+Exported char *atl_fgetsp(s, n, stream) char *s;
+int n;
+FILE *stream;
 {
-	int i = 0, ch;
+    int i = 0, ch;
 
-	while (True) {
-	   ch = getc(stream);
-	   if (ch == EOF) {
-	      if (i == 0)
-		 return NULL;
-	      break;
-	   }
-           if (ch == '\r') {
-	      ch = getc(stream);
-              if (ch != '\n')
-		 V ungetc(ch, stream);
-	      break;
-	   }
-           if (ch == '\n') {
-	      ch = getc(stream);
-              if (ch != '\r')
-		 V ungetc(ch, stream);
-	      break;
-	   }
-	   if (i < (n - 1))
-	      s[i++] = ch;
-	}
-	s[i] = EOS;
-	return s;
+    while (True)
+    {
+        ch = getc(stream);
+        if (ch == EOF)
+        {
+            if (i == 0)
+                return NULL;
+            break;
+        }
+        if (ch == '\r')
+        {
+            ch = getc(stream);
+            if (ch != '\n')
+                V ungetc(ch, stream);
+            break;
+        }
+        if (ch == '\n')
+        {
+            ch = getc(stream);
+            if (ch != '\r')
+                V ungetc(ch, stream);
+            break;
+        }
+        if (i < (n - 1))
+            s[i++] = ch;
+    }
+    s[i] = EOS;
+    return s;
 }
 #endif /* FgetspNeeded */
 
@@ -554,20 +591,20 @@ void atl_memstat()
     V printf("  Memory Area     usage     used    allocated   in use \n");
 
     V printf(fmt, "Stack",
-	((long) (stk - stack)),
-	((long) (stackmax - stack)),
-	atl_stklen,
-	(100L * (stk - stack)) / atl_stklen);
+             ((long)(stk - stack)),
+             ((long)(stackmax - stack)),
+             atl_stklen,
+             (100L * (stk - stack)) / atl_stklen);
     V printf(fmt, "Return stack",
-	((long) (rstk - rstack)),
-	((long) (rstackmax - rstack)),
-	atl_rstklen,
-	(100L * (rstk - rstack)) / atl_rstklen);
+             ((long)(rstk - rstack)),
+             ((long)(rstackmax - rstack)),
+             atl_rstklen,
+             (100L * (rstk - rstack)) / atl_rstklen);
     V printf(fmt, "Heap",
-	((long) (hptr - heap)),
-	((long) (heapmax - heap)),
-	atl_heaplen,
-	(100L * (hptr - heap)) / atl_heaplen);
+             ((long)(hptr - heap)),
+             ((long)(heapmax - heap)),
+             atl_heaplen,
+             (100L * (hptr - heap)) / atl_heaplen);
 }
 #endif /* MEMSTAT */
 
@@ -577,15 +614,14 @@ void atl_memstat()
 	       name and initial values for its attributes, returns
 	       the newly-allocated dictionary item. */
 
-static void enter(tkname)
-  char *tkname;
+static void enter(tkname) char *tkname;
 {
     /* Allocate name buffer */
-    createword->wname = alloc(((unsigned int) strlen(tkname) + 2));
-    createword->wname[0] = 0;	      /* Clear flags */
+    createword->wname = alloc(((unsigned int)strlen(tkname) + 2));
+    createword->wname[0] = 0;                /* Clear flags */
     V strcpy(createword->wname + 1, tkname); /* Copy token to name buffer */
-    createword->wnext = dict;	      /* Chain rest of dictionary to word */
-    dict = createword;		      /* Put word at head of dictionary */
+    createword->wnext = dict;                /* Chain rest of dictionary to word */
+    dict = createword;                       /* Put word at head of dictionary */
 }
 
 #ifdef Keyhit
@@ -598,11 +634,13 @@ static Boolean kbquit()
 {
     int key;
 
-    if ((key = Keyhit()) != 0) {
+    if ((key = Keyhit()) != 0)
+    {
         V printf("\nPress RETURN to stop, any other key to continue: ");
-	while ((key = Keyhit()) == 0) ;
+        while ((key = Keyhit()) == 0)
+            ;
         if (key == '\r' || (key == '\n'))
-	    return True;
+            return True;
     }
     return False;
 }
@@ -613,68 +651,78 @@ static Boolean kbquit()
 #ifdef NOMEMCHECK
 #define Compiling
 #else
-#define Compiling if (state == Falsity) {notcomp(); return;}
+#define Compiling         \
+    if (state == Falsity) \
+    {                     \
+        notcomp();        \
+        return;           \
+    }
 #endif
-#define Compconst(x) Ho(1); Hstore = (stackitem) (x)
-#define Skipstring ip += *((char *) ip)
+#define Compconst(x) \
+    Ho(1);           \
+    Hstore = (stackitem)(x)
+#define Skipstring ip += *((char *)ip)
 
-prim P_plus()			      /* Add two numbers */
+prim P_plus() /* Add two numbers */
 {
     Sl(2);
-/* printf("PLUS %lx + %lx = %lx\n", S1, S0, (S1 + S0)); */
+    /* printf("PLUS %lx + %lx = %lx\n", S1, S0, (S1 + S0)); */
     S1 += S0;
     Pop;
 }
 
-prim P_minus()			      /* Subtract two numbers */
+prim P_minus() /* Subtract two numbers */
 {
     Sl(2);
     S1 -= S0;
     Pop;
 }
 
-prim P_times()			      /* Multiply two numbers */
+prim P_times() /* Multiply two numbers */
 {
     Sl(2);
     S1 *= S0;
     Pop;
 }
 
-prim P_div()			      /* Divide two numbers */
+prim P_div() /* Divide two numbers */
 {
     Sl(2);
 #ifndef NOMEMCHECK
-    if (S0 == 0) {
-	divzero();
-	return;
+    if (S0 == 0)
+    {
+        divzero();
+        return;
     }
 #endif /* NOMEMCHECK */
     S1 /= S0;
     Pop;
 }
 
-prim P_mod()			      /* Take remainder */
+prim P_mod() /* Take remainder */
 {
     Sl(2);
 #ifndef NOMEMCHECK
-    if (S0 == 0) {
-	divzero();
-	return;
+    if (S0 == 0)
+    {
+        divzero();
+        return;
     }
 #endif /* NOMEMCHECK */
     S1 %= S0;
     Pop;
 }
 
-prim P_divmod() 		      /* Compute quotient and remainder */
+prim P_divmod() /* Compute quotient and remainder */
 {
     stackitem quot;
 
     Sl(2);
 #ifndef NOMEMCHECK
-    if (S0 == 0) {
-	divzero();
-	return;
+    if (S0 == 0)
+    {
+        divzero();
+        return;
     }
 #endif /* NOMEMCHECK */
     quot = S1 / S0;
@@ -682,143 +730,142 @@ prim P_divmod() 		      /* Compute quotient and remainder */
     S0 = quot;
 }
 
-prim P_min()			      /* Take minimum of stack top */
+prim P_min() /* Take minimum of stack top */
 {
     Sl(2);
     S1 = min(S1, S0);
     Pop;
 }
 
-prim P_max()			      /* Take maximum of stack top */
+prim P_max() /* Take maximum of stack top */
 {
     Sl(2);
     S1 = max(S1, S0);
     Pop;
 }
 
-prim P_neg()			      /* Negate top of stack */
+prim P_neg() /* Negate top of stack */
 {
     Sl(1);
-    S0 = - S0;
+    S0 = -S0;
 }
 
-prim P_abs()			      /* Take absolute value of top of stack */
+prim P_abs() /* Take absolute value of top of stack */
 {
     Sl(1);
     S0 = abs(S0);
 }
 
-prim P_equal()			      /* Test equality */
+prim P_equal() /* Test equality */
 {
     Sl(2);
     S1 = (S1 == S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_unequal()		      /* Test inequality */
+prim P_unequal() /* Test inequality */
 {
     Sl(2);
     S1 = (S1 != S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_gtr()			      /* Test greater than */
+prim P_gtr() /* Test greater than */
 {
     Sl(2);
     S1 = (S1 > S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_lss()			      /* Test less than */
+prim P_lss() /* Test less than */
 {
     Sl(2);
     S1 = (S1 < S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_geq()			      /* Test greater than or equal */
+prim P_geq() /* Test greater than or equal */
 {
     Sl(2);
     S1 = (S1 >= S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_leq()			      /* Test less than or equal */
+prim P_leq() /* Test less than or equal */
 {
     Sl(2);
     S1 = (S1 <= S0) ? Truth : Falsity;
     Pop;
 }
 
-prim P_and()			      /* Logical and */
+prim P_and() /* Logical and */
 {
     Sl(2);
-/* printf("AND %lx & %lx = %lx\n", S1, S0, (S1 & S0)); */
+    /* printf("AND %lx & %lx = %lx\n", S1, S0, (S1 & S0)); */
     S1 &= S0;
     Pop;
 }
 
-prim P_or()			      /* Logical or */
+prim P_or() /* Logical or */
 {
     Sl(2);
     S1 |= S0;
     Pop;
 }
 
-prim P_xor()			      /* Logical xor */
+prim P_xor() /* Logical xor */
 {
     Sl(2);
     S1 ^= S0;
     Pop;
 }
 
-prim P_not()			      /* Logical negation */
+prim P_not() /* Logical negation */
 {
     Sl(1);
     S0 = ~S0;
 }
 
-prim P_shift()			      /* Shift:  value nbits -- value */
+prim P_shift() /* Shift:  value nbits -- value */
 {
     Sl(1);
-    S1 = (S0 < 0) ? (((unsigned long) S1) >> (-S0)) :
-		    (((unsigned long) S1) <<   S0);
+    S1 = (S0 < 0) ? (((unsigned long)S1) >> (-S0)) : (((unsigned long)S1) << S0);
     Pop;
 }
 
 #ifdef SHORTCUTA
 
-prim P_1plus()			      /* Add one */
+prim P_1plus() /* Add one */
 {
     Sl(1);
     S0++;
 }
 
-prim P_2plus()			      /* Add two */
+prim P_2plus() /* Add two */
 {
     Sl(1);
     S0 += 2;
 }
 
-prim P_1minus() 		      /* Subtract one */
+prim P_1minus() /* Subtract one */
 {
     Sl(1);
     S0--;
 }
 
-prim P_2minus() 		      /* Subtract two */
+prim P_2minus() /* Subtract two */
 {
     Sl(1);
     S0 -= 2;
 }
 
-prim P_2times() 		      /* Multiply by two */
+prim P_2times() /* Multiply by two */
 {
     Sl(1);
     S0 *= 2;
 }
 
-prim P_2div()			      /* Divide by two */
+prim P_2div() /* Divide by two */
 {
     Sl(1);
     S0 /= 2;
@@ -828,25 +875,25 @@ prim P_2div()			      /* Divide by two */
 
 #ifdef SHORTCUTC
 
-prim P_0equal() 		      /* Equal to zero ? */
+prim P_0equal() /* Equal to zero ? */
 {
     Sl(1);
     S0 = (S0 == 0) ? Truth : Falsity;
 }
 
-prim P_0notequal()		      /* Not equal to zero ? */
+prim P_0notequal() /* Not equal to zero ? */
 {
     Sl(1);
     S0 = (S0 != 0) ? Truth : Falsity;
 }
 
-prim P_0gtr()			      /* Greater than zero ? */
+prim P_0gtr() /* Greater than zero ? */
 {
     Sl(1);
     S0 = (S0 > 0) ? Truth : Falsity;
 }
 
-prim P_0lss()			      /* Less than zero ? */
+prim P_0lss() /* Less than zero ? */
 {
     Sl(1);
     S0 = (S0 < 0) ? Truth : Falsity;
@@ -856,36 +903,36 @@ prim P_0lss()			      /* Less than zero ? */
 
 /*  Storage allocation (heap) primitives  */
 
-prim P_here()			      /* Push current heap address */
+prim P_here() /* Push current heap address */
 {
     So(1);
-    Push = (stackitem) hptr;
+    Push = (stackitem)hptr;
 }
 
-prim P_bang()			      /* Store value into address */
+prim P_bang() /* Store value into address */
 {
     Sl(2);
     Hpc(S0);
-    *((stackitem *) S0) = S1;
+    *((stackitem *)S0) = S1;
     Pop2;
 }
 
-prim P_at()			      /* Fetch value from address */
+prim P_at() /* Fetch value from address */
 {
     Sl(1);
     Hpc(S0);
-    S0 = *((stackitem *) S0);
+    S0 = *((stackitem *)S0);
 }
 
-prim P_plusbang()		      /* Add value at specified address */
+prim P_plusbang() /* Add value at specified address */
 {
     Sl(2);
     Hpc(S0);
-    *((stackitem *) S0) += S1;
+    *((stackitem *)S0) += S1;
     Pop2;
 }
 
-prim P_allot()			      /* Allocate heap bytes */
+prim P_allot() /* Allocate heap bytes */
 {
     stackitem n;
 
@@ -896,7 +943,7 @@ prim P_allot()			      /* Allocate heap bytes */
     hptr += n;
 }
 
-prim P_comma()			      /* Store one item on heap */
+prim P_comma() /* Store one item on heap */
 {
     Sl(1);
     Ho(1);
@@ -904,131 +951,134 @@ prim P_comma()			      /* Store one item on heap */
     Pop;
 }
 
-prim P_cbang()			      /* Store byte value into address */
+prim P_cbang() /* Store byte value into address */
 {
     Sl(2);
     Hpc(S0);
-    *((unsigned char *) S0) = S1;
+    *((unsigned char *)S0) = S1;
     Pop2;
 }
 
-prim P_cat()			      /* Fetch byte value from address */
+prim P_cat() /* Fetch byte value from address */
 {
     Sl(1);
     Hpc(S0);
-    S0 = *((unsigned char *) S0);
+    S0 = *((unsigned char *)S0);
 }
 
-prim P_ccomma() 		      /* Store one byte on heap */
+prim P_ccomma() /* Store one byte on heap */
 {
     unsigned char *chp;
 
     Sl(1);
     Ho(1);
-    chp = ((unsigned char *) hptr);
+    chp = ((unsigned char *)hptr);
     *chp++ = S0;
-    hptr = (stackitem *) chp;
+    hptr = (stackitem *)chp;
     Pop;
 }
 
-prim P_cequal() 		      /* Align heap pointer after storing */
-{				      /* a series of bytes. */
-    stackitem n = (((stackitem) hptr) - ((stackitem) heap)) %
-			(sizeof(stackitem));
+prim P_cequal() /* Align heap pointer after storing */
+{               /* a series of bytes. */
+    stackitem n = (((stackitem)hptr) - ((stackitem)heap)) %
+                  (sizeof(stackitem));
 
-    if (n != 0) {
-	char *chp = ((char *) hptr);
+    if (n != 0)
+    {
+        char *chp = ((char *)hptr);
 
-	chp += sizeof(stackitem) - n;
-	hptr = ((stackitem *) chp);
+        chp += sizeof(stackitem) - n;
+        hptr = ((stackitem *)chp);
     }
 }
 
 /*  Variable and constant primitives  */
 
-prim P_var()			      /* Push body address of current word */
+prim P_var() /* Push body address of current word */
 {
     So(1);
-    Push = (stackitem) (((stackitem *) curword) + Dictwordl);
+    Push = (stackitem)(((stackitem *)curword) + Dictwordl);
 }
 
-Exported void P_create()	      /* Create new word */
+Exported void P_create() /* Create new word */
 {
-    defpend = True;		      /* Set definition pending */
+    defpend = True; /* Set definition pending */
     Ho(Dictwordl);
-    createword = (dictword *) hptr;   /* Develop address of word */
-    createword->wname = NULL;	      /* Clear pointer to name string */
-    createword->wcode = P_var;	      /* Store default code */
-    hptr += Dictwordl;		      /* Allocate heap space for word */
+    createword = (dictword *)hptr; /* Develop address of word */
+    createword->wname = NULL;      /* Clear pointer to name string */
+    createword->wcode = P_var;     /* Store default code */
+    hptr += Dictwordl;             /* Allocate heap space for word */
 }
 
-prim P_forget() 		      /* Forget word */
+prim P_forget() /* Forget word */
 {
-    forgetpend = True;		      /* Mark forget pending */
+    forgetpend = True; /* Mark forget pending */
 }
 
-prim P_variable()		      /* Declare variable */
+prim P_variable() /* Declare variable */
 {
-    P_create(); 		      /* Create dictionary item */
+    P_create(); /* Create dictionary item */
     Ho(1);
-    Hstore = 0; 		      /* Initial value = 0 */
+    Hstore = 0; /* Initial value = 0 */
 }
 
-prim P_con()			      /* Push value in body */
+prim P_con() /* Push value in body */
 {
     So(1);
-    Push = *(((stackitem *) curword) + Dictwordl);
+    Push = *(((stackitem *)curword) + Dictwordl);
 }
 
-prim P_constant()		      /* Declare constant */
+prim P_constant() /* Declare constant */
 {
     Sl(1);
-    P_create(); 		      /* Create dictionary item */
-    createword->wcode = P_con;	      /* Set code to constant push */
+    P_create();                /* Create dictionary item */
+    createword->wcode = P_con; /* Set code to constant push */
     Ho(1);
-    Hstore = S0;		      /* Store constant value in body */
+    Hstore = S0; /* Store constant value in body */
     Pop;
 }
 
 /*  Array primitives  */
 
 #ifdef ARRAY
-prim P_arraysub()		      /* Array subscript calculation */
-{				      /* sub1 sub2 ... subn -- addr */
+prim P_arraysub() /* Array subscript calculation */
+{                 /* sub1 sub2 ... subn -- addr */
     int i, offset, esize, nsubs;
     stackitem *array;
     stackitem *isp;
 
     Sl(1);
-    array = (((stackitem *) curword) + Dictwordl);
+    array = (((stackitem *)curword) + Dictwordl);
     Hpc(array);
-    nsubs = *array++;		      /* Load number of subscripts */
-    esize = *array++;		      /* Load element size */
+    nsubs = *array++; /* Load number of subscripts */
+    esize = *array++; /* Load element size */
 #ifndef NOMEMCHECK
     isp = &S0;
-    for (i = 0; i < nsubs; i++) {
-	stackitem subn = *isp--;
+    for (i = 0; i < nsubs; i++)
+    {
+        stackitem subn = *isp--;
 
-	if (subn < 0 || subn >= array[i])
+        if (subn < 0 || subn >= array[i])
             trouble("Subscript out of range");
     }
 #endif /* NOMEMCHECK */
     isp = &S0;
-    offset = *isp;		      /* Load initial offset */
+    offset = *isp; /* Load initial offset */
     for (i = 1; i < nsubs; i++)
-	offset = (offset * (*(++array))) + *(--isp);
+        offset = (offset * (*(++array))) + *(--isp);
     Npop(nsubs - 1);
     /* Calculate subscripted address.  We start at the current word,
        advance to the body, skip two more words for the subscript count
        and the fundamental element size, then skip the subscript bounds
        words (as many as there are subscripts).  Then, finally, we
        can add the calculated offset into the array. */
-    S0 = (stackitem) (((char *) (((stackitem *) curword) +
-	    Dictwordl + 2 + nsubs)) + (esize * offset));
+    S0 = (stackitem)(((char *)(((stackitem *)curword) +
+                               Dictwordl + 2 + nsubs)) +
+                     (esize * offset));
 }
 
-prim P_array()			      /* Declare array */
-{				      /* sub1 sub2 ... subn n esize -- array */
+prim P_array() /* Declare array */
+{              /* sub1 sub2 ... subn n esize -- array */
     int i, nsubs, asize = 1;
     stackitem *isp;
 
@@ -1040,33 +1090,35 @@ prim P_array()			      /* Declare array */
         trouble("Bad array subscript count");
 #endif /* NOMEMCHECK */
 
-    nsubs = S1; 		      /* Number of subscripts */
-    Sl(nsubs + 2);		      /* Verify that dimensions are present */
+    nsubs = S1;    /* Number of subscripts */
+    Sl(nsubs + 2); /* Verify that dimensions are present */
 
     /* Calculate size of array as the product of the subscripts */
 
-    asize = S0; 		      /* Fundamental element size */
+    asize = S0; /* Fundamental element size */
     isp = &S2;
-    for (i = 0; i < nsubs; i++) {
+    for (i = 0; i < nsubs; i++)
+    {
 #ifndef NOMEMCHECK
-	if (*isp <= 0)
+        if (*isp <= 0)
             trouble("Bad array dimension");
 #endif /* NOMEMCHECK */
-	asize *= *isp--;
+        asize *= *isp--;
     }
 
     asize = (asize + (sizeof(stackitem) - 1)) / sizeof(stackitem);
-    Ho(asize + nsubs + 2);	      /* Reserve space for array and header */
-    P_create(); 		      /* Create variable */
-    createword->wcode = P_arraysub;   /* Set method to subscript calculate */
-    Hstore = nsubs;		      /* Header <- Number of subscripts */
-    Hstore = S0;		      /* Header <- Fundamental element size */
+    Ho(asize + nsubs + 2);          /* Reserve space for array and header */
+    P_create();                     /* Create variable */
+    createword->wcode = P_arraysub; /* Set method to subscript calculate */
+    Hstore = nsubs;                 /* Header <- Number of subscripts */
+    Hstore = S0;                    /* Header <- Fundamental element size */
     isp = &S2;
-    for (i = 0; i < nsubs; i++) {     /* Header <- Store subscripts */
-	Hstore = *isp--;
+    for (i = 0; i < nsubs; i++)
+    { /* Header <- Store subscripts */
+        Hstore = *isp--;
     }
-    while (asize-- > 0) 	      /* Clear the array to zero */
-	Hstore = 0;
+    while (asize-- > 0) /* Clear the array to zero */
+        Hstore = 0;
     Npop(nsubs + 2);
 }
 #endif /* ARRAY */
@@ -1075,144 +1127,147 @@ prim P_array()			      /* Declare array */
 
 #ifdef STRING
 
-prim P_strlit() 		      /* Push address of string literal */
+prim P_strlit() /* Push address of string literal */
 {
     So(1);
-    Push = (stackitem) (((char *) ip) + 1);
+    Push = (stackitem)(((char *)ip) + 1);
 #ifdef TRACE
-    if (atl_trace) {
-        V printf("\"%s\" ", (((char *) ip) + 1));
+    if (atl_trace)
+    {
+        V printf("\"%s\" ", (((char *)ip) + 1));
     }
-#endif /* TRACE */
-    Skipstring; 		      /* Advance IP past it */
+#endif          /* TRACE */
+    Skipstring; /* Advance IP past it */
 }
 
-Exported prim P_string() 		      /* Create string buffer */
+Exported prim P_string() /* Create string buffer */
 {
     Sl(1);
     Ho((S0 + 1 + sizeof(stackitem)) / sizeof(stackitem));
-    P_create(); 		      /* Create variable */
+    P_create(); /* Create variable */
     /* Allocate storage for string */
     hptr += (S0 + 1 + sizeof(stackitem)) / sizeof(stackitem);
     Pop;
 }
 
-prim P_strcpy() 		      /* Copy string to address on stack */
+prim P_strcpy() /* Copy string to address on stack */
 {
     Sl(2);
     Hpc(S0);
     Hpc(S1);
-    V strcpy((char *) S0, (char *) S1);
+    V strcpy((char *)S0, (char *)S1);
     Pop2;
 }
 
-prim P_strcat() 		      /* Append string to address on stack */
+prim P_strcat() /* Append string to address on stack */
 {
     Sl(2);
     Hpc(S0);
     Hpc(S1);
-    V strcat((char *) S0, (char *) S1);
+    V strcat((char *)S0, (char *)S1);
     Pop2;
 }
 
-prim P_strlen() 		      /* Take length of string on stack top */
+prim P_strlen() /* Take length of string on stack top */
 {
     Sl(1);
     Hpc(S0);
-    S0 = strlen((char *) S0);
+    S0 = strlen((char *)S0);
 }
 
-prim P_strcmp() 		      /* Compare top two strings on stack */
+prim P_strcmp() /* Compare top two strings on stack */
 {
     int i;
 
     Sl(2);
     Hpc(S0);
     Hpc(S1);
-    i = strcmp((char *) S1, (char *) S0);
+    i = strcmp((char *)S1, (char *)S0);
     S1 = (i == 0) ? 0L : ((i > 0) ? 1L : -1L);
     Pop;
 }
 
-prim P_strchar()		      /* Find character in string */
+prim P_strchar() /* Find character in string */
 {
     Sl(2);
     Hpc(S0);
     Hpc(S1);
-    S1 = (stackitem) strchr((char *) S1, *((char *) S0));
+    S1 = (stackitem)strchr((char *)S1, *((char *)S0));
     Pop;
 }
 
-prim P_substr() 		      /* Extract and store substring */
-{				      /* source start length/-1 dest -- */
+prim P_substr() /* Extract and store substring */
+{               /* source start length/-1 dest -- */
     long sl, sn;
     char *ss, *sp, *se, *ds;
 
     Sl(4);
     Hpc(S0);
     Hpc(S3);
-    sl = strlen(ss = ((char *) S3));
+    sl = strlen(ss = ((char *)S3));
     se = ss + sl;
-    sp = ((char *) S3) + S2;
+    sp = ((char *)S3) + S2;
     if ((sn = S1) < 0)
-	sn = 999999L;
-    ds = (char *) S0;
+        sn = 999999L;
+    ds = (char *)S0;
     while (sn-- && (sp < se))
-	*ds++ = *sp++;
+        *ds++ = *sp++;
     *ds++ = EOS;
     Npop(4);
 }
 
-prim P_strform()		      /* Format integer using sprintf() */
-{                                     /* value "%ld" str -- */
+prim P_strform() /* Format integer using sprintf() */
+{                /* value "%ld" str -- */
     Sl(2);
     Hpc(S0);
     Hpc(S1);
-    V sprintf((char *) S0, (char *) S1, S2);
+    V sprintf((char *)S0, (char *)S1, S2);
     Npop(3);
 }
 
 #ifdef REAL
-prim P_fstrform()		      /* Format real using sprintf() */
-{                                     /* rvalue "%6.2f" str -- */
+prim P_fstrform() /* Format real using sprintf() */
+{                 /* rvalue "%6.2f" str -- */
     Sl(4);
     Hpc(S0);
     Hpc(S1);
-    V sprintf((char *) S0, (char *) S1, REAL1);
+    V sprintf((char *)S0, (char *)S1, REAL1);
     Npop(4);
 }
 #endif /* REAL */
 
-prim P_strint() 		      /* String to integer */
-{				      /* str -- endptr value */
+prim P_strint() /* String to integer */
+{               /* str -- endptr value */
     stackitem is;
     char *eptr;
 
     Sl(1);
     So(1);
     Hpc(S0);
-    is = strtoul((char *) S0, &eptr, 0);
-    S0 = (stackitem) eptr;
+    is = strtoul((char *)S0, &eptr, 0);
+    S0 = (stackitem)eptr;
     Push = is;
 }
 
 #ifdef REAL
-prim P_strreal()		      /* String to real */
-{				      /* str -- endptr value */
+prim P_strreal() /* String to real */
+{                /* str -- endptr value */
     int i;
-    union {
-    	atl_real fs;
-	stackitem fss[Realsize];
+    union
+    {
+        atl_real fs;
+        stackitem fss[Realsize];
     } fsu;
     char *eptr;
 
     Sl(1);
     So(2);
     Hpc(S0);
-    fsu.fs = strtod((char *) S0, &eptr);
-    S0 = (stackitem) eptr;
-    for (i = 0; i < Realsize; i++) {
-    	Push = fsu.fss[i];
+    fsu.fs = strtod((char *)S0, &eptr);
+    S0 = (stackitem)eptr;
+    for (i = 0; i < Realsize; i++)
+    {
+        Push = fsu.fss[i];
     }
 }
 #endif /* REAL */
@@ -1222,85 +1277,88 @@ prim P_strreal()		      /* String to real */
 
 #ifdef REAL
 
-prim P_flit()			      /* Push floating point literal */
+prim P_flit() /* Push floating point literal */
 {
     int i;
 
     So(Realsize);
 #ifdef TRACE
-    if (atl_trace) {
-	atl_real tr;
+    if (atl_trace)
+    {
+        atl_real tr;
 
-	V memcpy((char *) &tr, (char *) ip, sizeof(atl_real));
+        V memcpy((char *)&tr, (char *)ip, sizeof(atl_real));
         V printf("%g ", tr);
     }
 #endif /* TRACE */
-    for (i = 0; i < Realsize; i++) {
-	Push = (stackitem) *ip++;
+    for (i = 0; i < Realsize; i++)
+    {
+        Push = (stackitem)*ip++;
     }
 }
 
-prim P_fplus()			      /* Add floating point numbers */
+prim P_fplus() /* Add floating point numbers */
 {
     Sl(2 * Realsize);
     SREAL1(REAL1 + REAL0);
     Realpop;
 }
 
-prim P_fminus() 		      /* Subtract floating point numbers */
+prim P_fminus() /* Subtract floating point numbers */
 {
     Sl(2 * Realsize);
     SREAL1(REAL1 - REAL0);
     Realpop;
 }
 
-prim P_ftimes() 		      /* Multiply floating point numbers */
+prim P_ftimes() /* Multiply floating point numbers */
 {
     Sl(2 * Realsize);
     SREAL1(REAL1 * REAL0);
     Realpop;
 }
 
-prim P_fdiv()			      /* Divide floating point numbers */
+prim P_fdiv() /* Divide floating point numbers */
 {
     Sl(2 * Realsize);
 #ifndef NOMEMCHECK
-    if (REAL0 == 0.0) {
-	divzero();
-	return;
+    if (REAL0 == 0.0)
+    {
+        divzero();
+        return;
     }
 #endif /* NOMEMCHECK */
     SREAL1(REAL1 / REAL0);
     Realpop;
 }
 
-prim P_fmin()			      /* Minimum of top two floats */
+prim P_fmin() /* Minimum of top two floats */
 {
     Sl(2 * Realsize);
     SREAL1(min(REAL1, REAL0));
     Realpop;
 }
 
-prim P_fmax()			      /* Maximum of top two floats */
+prim P_fmax() /* Maximum of top two floats */
 {
     Sl(2 * Realsize);
     SREAL1(max(REAL1, REAL0));
     Realpop;
 }
 
-prim P_fneg()			      /* Negate top of stack */
+prim P_fneg() /* Negate top of stack */
 {
     Sl(Realsize);
-    SREAL0(- REAL0);
+    SREAL0(-REAL0);
 }
 
-prim P_fabs()			      /* Absolute value of top of stack */
+prim P_fabs() /* Absolute value of top of stack */
 {
     Sl(Realsize);
     SREAL0(abs(REAL0));
 }
 
-prim P_fequal() 		      /* Test equality of top of stack */
+prim P_fequal() /* Test equality of top of stack */
 {
     stackitem t;
 
@@ -1310,7 +1368,7 @@ prim P_fequal() 		      /* Test equality of top of stack */
     Push = t;
 }
 
-prim P_funequal()		      /* Test inequality of top of stack */
+prim P_funequal() /* Test inequality of top of stack */
 {
     stackitem t;
 
@@ -1320,7 +1378,7 @@ prim P_funequal()		      /* Test inequality of top of stack */
     Push = t;
 }
 
-prim P_fgtr()			      /* Test greater than */
+prim P_fgtr() /* Test greater than */
 {
     stackitem t;
 
@@ -1330,7 +1388,7 @@ prim P_fgtr()			      /* Test greater than */
     Push = t;
 }
 
-prim P_flss()			      /* Test less than */
+prim P_flss() /* Test less than */
 {
     stackitem t;
 
@@ -1340,7 +1398,7 @@ prim P_flss()			      /* Test less than */
     Push = t;
 }
 
-prim P_fgeq()			      /* Test greater than or equal */
+prim P_fgeq() /* Test greater than or equal */
 {
     stackitem t;
 
@@ -1350,7 +1408,7 @@ prim P_fgeq()			      /* Test greater than or equal */
     Push = t;
 }
 
-prim P_fleq()			      /* Test less than or equal */
+prim P_fleq() /* Test less than or equal */
 {
     stackitem t;
 
@@ -1360,93 +1418,95 @@ prim P_fleq()			      /* Test less than or equal */
     Push = t;
 }
 
-prim P_fdot()			      /* Print floating point top of stack */
+prim P_fdot() /* Print floating point top of stack */
 {
     Sl(Realsize);
     V printf("%g ", REAL0);
     Realpop;
 }
 
-prim P_float()			      /* Convert integer to floating */
+prim P_float() /* Convert integer to floating */
 {
     atl_real r;
 
     Sl(1)
-    So(Realsize - 1);
+        So(Realsize - 1);
     r = S0;
     stk += Realsize - 1;
     SREAL0(r);
 }
 
-prim P_fix()			      /* Convert floating to integer */
+prim P_fix() /* Convert floating to integer */
 {
     stackitem i;
 
     Sl(Realsize);
-    i = (int) REAL0;
+    i = (int)REAL0;
     Realpop;
     Push = i;
 }
 
 #ifdef MATH
 
-#define Mathfunc(x) Sl(Realsize); SREAL0(x(REAL0))
+#define Mathfunc(x) \
+    Sl(Realsize);   \
+    SREAL0(x(REAL0))
 
-prim P_acos()			      /* Arc cosine */
+prim P_acos() /* Arc cosine */
 {
     Mathfunc(acos);
 }
 
-prim P_asin()			      /* Arc sine */
+prim P_asin() /* Arc sine */
 {
     Mathfunc(asin);
 }
 
-prim P_atan()			      /* Arc tangent */
+prim P_atan() /* Arc tangent */
 {
     Mathfunc(atan);
 }
 
-prim P_atan2()			      /* Arc tangent:  y x -- atan */
+prim P_atan2() /* Arc tangent:  y x -- atan */
 {
     Sl(2 * Realsize);
     SREAL1(atan2(REAL1, REAL0));
     Realpop;
 }
 
-prim P_cos()			      /* Cosine */
+prim P_cos() /* Cosine */
 {
     Mathfunc(cos);
 }
 
-prim P_exp()			      /* E ^ x */
+prim P_exp() /* E ^ x */
 {
     Mathfunc(exp);
 }
 
-prim P_log()			      /* Natural log */
+prim P_log() /* Natural log */
 {
     Mathfunc(log);
 }
 
-prim P_pow()			      /* X ^ Y */
+prim P_pow() /* X ^ Y */
 {
     Sl(2 * Realsize);
     SREAL1(pow(REAL1, REAL0));
     Realpop;
 }
 
-prim P_sin()			      /* Sine */
+prim P_sin() /* Sine */
 {
     Mathfunc(sin);
 }
 
-prim P_sqrt()			      /* Square root */
+prim P_sqrt() /* Square root */
 {
     Mathfunc(sqrt);
 }
 
-prim P_tan()			      /* Tangent */
+prim P_tan() /* Tangent */
 {
     Mathfunc(tan);
 }
@@ -1458,86 +1518,93 @@ prim P_tan()			      /* Tangent */
 
 #ifdef CONIO
 
-prim P_dot()			      /* Print top of stack, pop it */
+prim P_dot() /* Print top of stack, pop it */
 {
     Sl(1);
     V printf(base == 16 ? "%lX" : "%ld ", S0);
     Pop;
 }
 
-prim P_question()		      /* Print value at address */
+prim P_question() /* Print value at address */
 {
     Sl(1);
     Hpc(S0);
-    V printf(base == 16 ? "%lX" : "%ld ", *((stackitem *) S0));
+    V printf(base == 16 ? "%lX" : "%ld ", *((stackitem *)S0));
     Pop;
 }
 
-prim P_cr()			      /* Carriage return */
+prim P_cr() /* Carriage return */
 {
     V printf("\n");
 }
 
-prim P_dots()			      /* Print entire contents of stack */
+prim P_dots() /* Print entire contents of stack */
 {
     stackitem *tsp;
 
     V printf("Stack: ");
     if (stk == stackbot)
         V printf("Empty.");
-    else {
-	for (tsp = stack; tsp < stk; tsp++) {
+    else
+    {
+        for (tsp = stack; tsp < stk; tsp++)
+        {
             V printf(base == 16 ? "%lX" : "%ld ", *tsp);
-	}
+        }
     }
 }
 
-prim P_dotquote()		      /* Print literal string that follows */
+prim P_dotquote() /* Print literal string that follows */
 {
     Compiling;
-    stringlit = True;		      /* Set string literal expected */
-    Compconst(s_dotparen);	      /* Compile .( word */
+    stringlit = True;      /* Set string literal expected */
+    Compconst(s_dotparen); /* Compile .( word */
 }
 
-prim P_dotparen()		      /* Print literal string that follows */
+prim P_dotparen() /* Print literal string that follows */
 {
-    if (ip == NULL) {		      /* If interpreting */
-	stringlit = True;	      /* Set to print next string constant */
-    } else {			      /* Otherwise, */
-        V printf("%s", ((char *) ip) + 1); /* print string literal
+    if (ip == NULL)
+    {                     /* If interpreting */
+        stringlit = True; /* Set to print next string constant */
+    }
+    else
+    {                                     /* Otherwise, */
+        V printf("%s", ((char *)ip) + 1); /* print string literal
 					 in in-line code. */
-	Skipstring;		      /* And advance IP past it */
+        Skipstring;                       /* And advance IP past it */
     }
 }
 
-prim P_type()			      /* Print string pointed to by stack */
+prim P_type() /* Print string pointed to by stack */
 {
     Sl(1);
     Hpc(S0);
-    V printf("%s", (char *) S0);
+    V printf("%s", (char *)S0);
     Pop;
 }
 
-prim P_words()			      /* List words */
+prim P_words() /* List words */
 {
 #ifndef Keyhit
     int key = 0;
 #endif
     dictword *dw = dict;
 
-    while (dw != NULL) {
+    while (dw != NULL)
+    {
 
         V printf("\n%s", dw->wname + 1);
-	dw = dw->wnext;
+        dw = dw->wnext;
 #ifdef Keyhit
-	if (kbquit()) {
-	    break;
-	}
+        if (kbquit())
+        {
+            break;
+        }
 #else
         /* If this system can't trap keystrokes, just stop the WORDS
 	   listing after 20 words. */
-	if (++key >= 20)
-	    break;
+        if (++key >= 20)
+            break;
 #endif
     }
     V printf("\n");
@@ -1546,15 +1613,15 @@ prim P_words()			      /* List words */
 
 #ifdef FILEIO
 
-prim P_file()			      /* Declare file */
+prim P_file() /* Declare file */
 {
     Ho(2);
-    P_create(); 		      /* Create variable */
-    Hstore = FileSent;		      /* Store file sentinel */
-    Hstore = 0; 		      /* Mark file not open */
+    P_create();        /* Create variable */
+    Hstore = FileSent; /* Store file sentinel */
+    Hstore = 0;        /* Mark file not open */
 }
 
-prim P_fopen()			      /* Open file: fname fmodes fd -- flag */
+prim P_fopen() /* Open file: fname fmodes fd -- flag */
 {
     FILE *fd;
     stackitem stat;
@@ -1563,119 +1630,128 @@ prim P_fopen()			      /* Open file: fname fmodes fd -- flag */
     Hpc(S2);
     Hpc(S0);
     Isfile(S0);
-    fd = fopen((char *) S2, fopenmodes[S1]);
-    fprintf(stdout, "Opening:\nS0: %s \nS2: %s \nmode: %s \nfd: %i \n", (char*)S0, (char *)S2, fopenmodes[S1], (int)fd);
-    if (fd == NULL) {
-	stat = Falsity;
-    } else {
-	*(((stackitem *) S0) + 1) = (stackitem) fd;
-	stat = Truth;
+    fd = fopen((char *)S2, fopenmodes[S1]);
+    fprintf(stdout, "Opening:\nS0: %s \nS2: %s \nmode: %s \nfd: %i \n", (char *)S0, (char *)S2, fopenmodes[S1], (int)fd);
+    if (fd == NULL)
+    {
+        stat = Falsity;
+    }
+    else
+    {
+        *(((stackitem *)S0) + 1) = (stackitem)fd;
+        stat = Truth;
     }
     Pop2;
     S0 = stat;
 }
 
-prim P_fclose() 		      /* Close file: fd -- */
+prim P_fclose() /* Close file: fd -- */
 {
     Sl(1);
     Hpc(S0);
     Isfile(S0);
     Isopen(S0);
     V fclose(FileD(S0));
-    *(((stackitem *) S0) + 1) = (stackitem) NULL;
+    *(((stackitem *)S0) + 1) = (stackitem)NULL;
     Pop;
 }
 
-prim P_fdelete()		      /* Delete file: fname -- flag */
+prim P_fdelete() /* Delete file: fname -- flag */
 {
     Sl(1);
     Hpc(S0);
-    S0 = (unlink((char *) S0) == 0) ? Truth : Falsity;
+    S0 = (unlink((char *)S0) == 0) ? Truth : Falsity;
 }
 
-prim P_fgetline()		      /* Get line: fd string -- flag */
+prim P_fgetline() /* Get line: fd string -- flag */
 {
     Sl(2);
     Hpc(S0);
     Isfile(S1);
     Isopen(S1);
-    if (atl_fgetsp((char *) S0, 132, FileD(S1)) == NULL) {
-	S1 = Falsity;
-    } else {
-	S1 = Truth;
+    if (atl_fgetsp((char *)S0, 132, FileD(S1)) == NULL)
+    {
+        S1 = Falsity;
+    }
+    else
+    {
+        S1 = Truth;
     }
     Pop;
 }
 
-prim P_fputline()		      /* Put line: string fd -- flag */
+prim P_fputline() /* Put line: string fd -- flag */
 {
     Sl(2);
     Hpc(S1);
     Isfile(S0);
     Isopen(S0);
-    if (fputs((char *) S1, FileD(S0)) == EOF) {
-	S1 = Falsity;
-    } else {
+    if (fputs((char *)S1, FileD(S0)) == EOF)
+    {
+        S1 = Falsity;
+    }
+    else
+    {
         S1 = putc('\n', FileD(S0)) == EOF ? Falsity : Truth;
     }
     Pop;
 }
 
-prim P_fread()			      /* File read: fd len buf -- length */
+prim P_fread() /* File read: fd len buf -- length */
 {
     Sl(3);
     Hpc(S0);
     Isfile(S2);
     Isopen(S2);
-    S2 = fread((char *) S0, 1, ((int) S1), FileD(S2));
+    S2 = fread((char *)S0, 1, ((int)S1), FileD(S2));
     Pop2;
 }
 
-prim P_fwrite() 		      /* File write: len buf fd -- length */
+prim P_fwrite() /* File write: len buf fd -- length */
 {
     Sl(3);
     Hpc(S1);
     Isfile(S0);
     Isopen(S0);
-    S2 = fwrite((char *) S1, 1, ((int) S2), FileD(S0));
+    S2 = fwrite((char *)S1, 1, ((int)S2), FileD(S0));
     Pop2;
 }
 
-prim P_fgetc()			      /* File get character: fd -- char */
+prim P_fgetc() /* File get character: fd -- char */
 {
     Sl(1);
     Isfile(S0);
     Isopen(S0);
-    S0 = getc(FileD(S0));	      /* Returns -1 if EOF hit */
+    S0 = getc(FileD(S0)); /* Returns -1 if EOF hit */
 }
 
-prim P_fputc()			      /* File put character: char fd -- stat */
+prim P_fputc() /* File put character: char fd -- stat */
 {
     Sl(2);
     Isfile(S0);
     Isopen(S0);
-    S1 = putc((char) S1, FileD(S0));
+    S1 = putc((char)S1, FileD(S0));
     Pop;
 }
 
-prim P_ftell()			      /* Return file position:	fd -- pos */
+prim P_ftell() /* Return file position:	fd -- pos */
 {
     Sl(1);
     Isfile(S0);
     Isopen(S0);
-    S0 = (stackitem) ftell(FileD(S0));
+    S0 = (stackitem)ftell(FileD(S0));
 }
 
-prim P_fseek()			      /* Seek file:  offset base fd -- */
+prim P_fseek() /* Seek file:  offset base fd -- */
 {
     Sl(3);
     Isfile(S0);
     Isopen(S0);
-    V fseek(FileD(S0), (long) S2, (int) S1);
+    V fseek(FileD(S0), (long)S2, (int)S1);
     Npop(3);
 }
 
-prim P_fload()			      /* Load source file:  fd -- evalstat */
+prim P_fload() /* Load source file:  fd -- evalstat */
 {
     int estat;
     FILE *fd;
@@ -1694,41 +1770,43 @@ prim P_fload()			      /* Load source file:  fd -- evalstat */
 #ifdef EVALUATE
 
 prim P_evaluate()
-{				      /* string -- status */
+{ /* string -- status */
     int es = ATL_SNORM;
     atl_statemark mk;
-    atl_int scomm = atl_comment;      /* Stack comment pending state */
-    dictword **sip = ip;	      /* Stack instruction pointer */
-    char *sinstr = instream;	      /* Stack input stream */
+    atl_int scomm = atl_comment; /* Stack comment pending state */
+    dictword **sip = ip;         /* Stack instruction pointer */
+    char *sinstr = instream;     /* Stack input stream */
     char *estring;
 
     Sl(1);
     Hpc(S0);
-    estring = (char *) S0;	      /* Get string to evaluate */
-    Pop;			      /* Pop so it sees arguments below it */
-    atl_mark(&mk);		      /* Mark in case of error */
-    ip = NULL;			      /* Fool atl_eval into interp state */
-    if ((es = atl_eval(estring)) != ATL_SNORM) {
-	atl_unwind(&mk);
+    estring = (char *)S0; /* Get string to evaluate */
+    Pop;                  /* Pop so it sees arguments below it */
+    atl_mark(&mk);        /* Mark in case of error */
+    ip = NULL;            /* Fool atl_eval into interp state */
+    if ((es = atl_eval(estring)) != ATL_SNORM)
+    {
+        atl_unwind(&mk);
     }
     /* If there were no other errors, check for a runaway comment.  If
        we ended the file in comment-ignore mode, set the runaway comment
        error status and unwind the file.  */
-    if ((es == ATL_SNORM) && (atl_comment != 0)) {
-	es = ATL_RUNCOMM;
-	atl_unwind(&mk);
+    if ((es == ATL_SNORM) && (atl_comment != 0))
+    {
+        es = ATL_RUNCOMM;
+        atl_unwind(&mk);
     }
-    atl_comment = scomm;	      /* Unstack comment pending status */
-    ip = sip;			      /* Unstack instruction pointer */
-    instream = sinstr;		      /* Unstack input stream */
+    atl_comment = scomm; /* Unstack comment pending status */
+    ip = sip;            /* Unstack instruction pointer */
+    instream = sinstr;   /* Unstack input stream */
     So(1);
-    Push = es;			      /* Return eval status on top of stack */
+    Push = es; /* Return eval status on top of stack */
 }
 #endif /* EVALUATE */
 
 /*  Stack mechanics  */
 
-prim P_depth()			      /* Push stack depth */
+prim P_depth() /* Push stack depth */
 {
     stackitem s = stk - stack;
 
@@ -1736,12 +1814,12 @@ prim P_depth()			      /* Push stack depth */
     Push = s;
 }
 
-prim P_clear()			      /* Clear stack */
+prim P_clear() /* Clear stack */
 {
     stk = stack;
 }
 
-prim P_dup()			      /* Duplicate top of stack */
+prim P_dup() /* Duplicate top of stack */
 {
     stackitem s;
 
@@ -1751,13 +1829,13 @@ prim P_dup()			      /* Duplicate top of stack */
     Push = s;
 }
 
-prim P_drop()			      /* Drop top item on stack */
+prim P_drop() /* Drop top item on stack */
 {
     Sl(1);
     Pop;
 }
 
-prim P_swap()			      /* Exchange two top items on stack */
+prim P_swap() /* Exchange two top items on stack */
 {
     stackitem t;
 
@@ -1767,7 +1845,7 @@ prim P_swap()			      /* Exchange two top items on stack */
     S0 = t;
 }
 
-prim P_over()			      /* Push copy of next to top of stack */
+prim P_over() /* Push copy of next to top of stack */
 {
     stackitem s;
 
@@ -1777,13 +1855,13 @@ prim P_over()			      /* Push copy of next to top of stack */
     Push = s;
 }
 
-prim P_pick()			      /* Copy indexed item from stack */
+prim P_pick() /* Copy indexed item from stack */
 {
     Sl(2);
     S0 = stk[-(2 + S0)];
 }
 
-prim P_rot()			      /* Rotate 3 top stack items */
+prim P_rot() /* Rotate 3 top stack items */
 {
     stackitem t;
 
@@ -1794,7 +1872,7 @@ prim P_rot()			      /* Rotate 3 top stack items */
     S1 = t;
 }
 
-prim P_minusrot()		      /* Reverse rotate 3 top stack items */
+prim P_minusrot() /* Reverse rotate 3 top stack items */
 {
     stackitem t;
 
@@ -1805,7 +1883,7 @@ prim P_minusrot()		      /* Reverse rotate 3 top stack items */
     S2 = t;
 }
 
-prim P_roll()			      /* Rotate N top stack items */
+prim P_roll() /* Rotate N top stack items */
 {
     stackitem i, j, t;
 
@@ -1815,31 +1893,31 @@ prim P_roll()			      /* Rotate N top stack items */
     Sl(i + 1);
     t = stk[-(i + 1)];
     for (j = -(i + 1); j < -1; j++)
-	stk[j] = stk[j + 1];
+        stk[j] = stk[j + 1];
     S0 = t;
 }
 
-prim P_tor()			      /* Transfer stack top to return stack */
+prim P_tor() /* Transfer stack top to return stack */
 {
     Rso(1);
     Sl(1);
-    Rpush = (rstackitem) S0;
+    Rpush = (rstackitem)S0;
     Pop;
 }
 
-prim P_rfrom()			      /* Transfer return stack top to stack */
+prim P_rfrom() /* Transfer return stack top to stack */
 {
     Rsl(1);
     So(1);
-    Push = (stackitem) R0;
+    Push = (stackitem)R0;
     Rpop;
 }
 
-prim P_rfetch() 		      /* Fetch top item from return stack */
+prim P_rfetch() /* Fetch top item from return stack */
 {
     Rsl(1);
     So(1);
-    Push = (stackitem) R0;
+    Push = (stackitem)R0;
 }
 
 #ifdef Macintosh
@@ -1853,7 +1931,7 @@ prim P_rfetch() 		      /* Fetch top item from return stack */
 
 #ifdef DOUBLE
 
-prim P_2dup()			      /* Duplicate stack top doubleword */
+prim P_2dup() /* Duplicate stack top doubleword */
 {
     stackitem s;
 
@@ -1865,13 +1943,13 @@ prim P_2dup()			      /* Duplicate stack top doubleword */
     Push = s;
 }
 
-prim P_2drop()			      /* Drop top two items from stack */
+prim P_2drop() /* Drop top two items from stack */
 {
     Sl(2);
     stk -= 2;
 }
 
-prim P_2swap()			      /* Swap top two double items on stack */
+prim P_2swap() /* Swap top two double items on stack */
 {
     stackitem t;
 
@@ -1884,7 +1962,7 @@ prim P_2swap()			      /* Swap top two double items on stack */
     S1 = t;
 }
 
-prim P_2over()			      /* Extract second pair from stack */
+prim P_2over() /* Extract second pair from stack */
 {
     stackitem s;
 
@@ -1896,7 +1974,7 @@ prim P_2over()			      /* Extract second pair from stack */
     Push = s;
 }
 
-prim P_2rot()			      /* Move third pair to top of stack */
+prim P_2rot() /* Move third pair to top of stack */
 {
     stackitem t1, t2;
 
@@ -1911,52 +1989,52 @@ prim P_2rot()			      /* Move third pair to top of stack */
     S0 = t1;
 }
 
-prim P_2variable()		      /* Declare double variable */
+prim P_2variable() /* Declare double variable */
 {
-    P_create(); 		      /* Create dictionary item */
+    P_create(); /* Create dictionary item */
     Ho(2);
-    Hstore = 0; 		      /* Initial value = 0... */
-    Hstore = 0; 		      /* ...in both words */
+    Hstore = 0; /* Initial value = 0... */
+    Hstore = 0; /* ...in both words */
 }
 
-prim P_2con()			      /* Push double value in body */
+prim P_2con() /* Push double value in body */
 {
     So(2);
-    Push = *(((stackitem *) curword) + Dictwordl);
-    Push = *(((stackitem *) curword) + Dictwordl + 1);
+    Push = *(((stackitem *)curword) + Dictwordl);
+    Push = *(((stackitem *)curword) + Dictwordl + 1);
 }
 
-prim P_2constant()		      /* Declare double word constant */
+prim P_2constant() /* Declare double word constant */
 {
     Sl(1);
-    P_create(); 		      /* Create dictionary item */
-    createword->wcode = P_2con;       /* Set code to constant push */
+    P_create();                 /* Create dictionary item */
+    createword->wcode = P_2con; /* Set code to constant push */
     Ho(2);
-    Hstore = S1;		      /* Store double word constant value */
-    Hstore = S0;		      /* in the two words of body */
+    Hstore = S1; /* Store double word constant value */
+    Hstore = S0; /* in the two words of body */
     Pop2;
 }
 
-prim P_2bang()			      /* Store double value into address */
+prim P_2bang() /* Store double value into address */
 {
     stackitem *sp;
 
     Sl(2);
     Hpc(S0);
-    sp = (stackitem *) S0;
+    sp = (stackitem *)S0;
     *sp++ = S2;
     *sp = S1;
     Npop(3);
 }
 
-prim P_2at()			      /* Fetch double value from address */
+prim P_2at() /* Fetch double value from address */
 {
     stackitem *sp;
 
     Sl(1);
     So(1);
     Hpc(S0);
-    sp = (stackitem *) S0;
+    sp = (stackitem *)S0;
     S0 = *sp++;
     Push = *sp;
 }
@@ -1964,146 +2042,148 @@ prim P_2at()			      /* Fetch double value from address */
 
 /*  Data transfer primitives  */
 
-prim P_dolit()			      /* Push instruction stream literal */
+prim P_dolit() /* Push instruction stream literal */
 {
     So(1);
 #ifdef TRACE
-    if (atl_trace) {
-        V printf("%ld ", (long) *ip);
+    if (atl_trace)
+    {
+        V printf("%ld ", (long)*ip);
     }
 #endif
-    Push = (stackitem) *ip++;	      /* Push the next datum from the
+    Push = (stackitem)*ip++; /* Push the next datum from the
 					 instruction stream. */
 }
 
 /*  Control flow primitives  */
 
-prim P_nest()			      /* Invoke compiled word */
+prim P_nest() /* Invoke compiled word */
 {
     Rso(1);
 #ifdef WALKBACK
-    *wbptr++ = curword; 	      /* Place word on walkback stack */
+    *wbptr++ = curword; /* Place word on walkback stack */
 #endif
-    Rpush = ip; 		      /* Push instruction pointer */
-    ip = (((dictword **) curword) + Dictwordl);
+    Rpush = ip; /* Push instruction pointer */
+    ip = (((dictword **)curword) + Dictwordl);
 }
 
-prim P_exit()			      /* Return to top of return stack */
+prim P_exit() /* Return to top of return stack */
 {
     Rsl(1);
 #ifdef WALKBACK
     wbptr = (wbptr > wback) ? wbptr - 1 : wback;
 #endif
-    ip = R0;			      /* Set IP to top of return stack */
+    ip = R0; /* Set IP to top of return stack */
     Rpop;
 }
 
-prim P_branch() 		      /* Jump to in-line address */
+prim P_branch() /* Jump to in-line address */
 {
-    ip += (stackitem) *ip;	      /* Jump addresses are IP-relative */
+    ip += (stackitem)*ip; /* Jump addresses are IP-relative */
 }
 
-prim P_qbranch()		      /* Conditional branch to in-line addr */
+prim P_qbranch() /* Conditional branch to in-line addr */
 {
     Sl(1);
-    if (S0 == 0)		      /* If flag is false */
-	ip += (stackitem) *ip;	      /* then branch. */
-    else			      /* Otherwise */
-	ip++;			      /* skip the in-line address. */
+    if (S0 == 0)              /* If flag is false */
+        ip += (stackitem)*ip; /* then branch. */
+    else                      /* Otherwise */
+        ip++;                 /* skip the in-line address. */
     Pop;
 }
 
-prim P_if()			      /* Compile IF word */
+prim P_if() /* Compile IF word */
 {
     Compiling;
-    Compconst(s_qbranch);	      /* Compile question branch */
+    Compconst(s_qbranch); /* Compile question branch */
     So(1);
-    Push = (stackitem) hptr;	      /* Save backpatch address on stack */
-    Compconst(0);		      /* Compile place-holder address cell */
+    Push = (stackitem)hptr; /* Save backpatch address on stack */
+    Compconst(0);           /* Compile place-holder address cell */
 }
 
-prim P_else()			      /* Compile ELSE word */
+prim P_else() /* Compile ELSE word */
 {
     stackitem *bp;
 
     Compiling;
     Sl(1);
-    Compconst(s_branch);	      /* Compile branch around other clause */
-    Compconst(0);		      /* Compile place-holder address cell */
+    Compconst(s_branch); /* Compile branch around other clause */
+    Compconst(0);        /* Compile place-holder address cell */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get IF backpatch address */
+    bp = (stackitem *)S0; /* Get IF backpatch address */
     *bp = hptr - bp;
-    S0 = (stackitem) (hptr - 1);      /* Update backpatch for THEN */
+    S0 = (stackitem)(hptr - 1); /* Update backpatch for THEN */
 }
 
-prim P_then()			      /* Compile THEN word */
+prim P_then() /* Compile THEN word */
 {
     stackitem *bp;
 
     Compiling;
     Sl(1);
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get IF/ELSE backpatch address */
+    bp = (stackitem *)S0; /* Get IF/ELSE backpatch address */
     *bp = hptr - bp;
     Pop;
 }
 
-prim P_qdup()			      /* Duplicate if nonzero */
+prim P_qdup() /* Duplicate if nonzero */
 {
     Sl(1);
-    if (S0 != 0) {
-	stackitem s = S0;
-	So(1);
-	Push = s;
+    if (S0 != 0)
+    {
+        stackitem s = S0;
+        So(1);
+        Push = s;
     }
 }
 
-prim P_begin()			      /* Compile BEGIN */
+prim P_begin() /* Compile BEGIN */
 {
     Compiling;
     So(1);
-    Push = (stackitem) hptr;	      /* Save jump back address on stack */
+    Push = (stackitem)hptr; /* Save jump back address on stack */
 }
 
-prim P_until()			      /* Compile UNTIL */
+prim P_until() /* Compile UNTIL */
 {
     stackitem off;
     stackitem *bp;
 
     Compiling;
     Sl(1);
-    Compconst(s_qbranch);	      /* Compile question branch */
+    Compconst(s_qbranch); /* Compile question branch */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get BEGIN address */
+    bp = (stackitem *)S0; /* Get BEGIN address */
     off = -(hptr - bp);
-    Compconst(off);		      /* Compile negative jumpback address */
+    Compconst(off); /* Compile negative jumpback address */
     Pop;
 }
 
-prim P_again()			      /* Compile AGAIN */
+prim P_again() /* Compile AGAIN */
 {
     stackitem off;
     stackitem *bp;
 
     Compiling;
-    Compconst(s_branch);	      /* Compile unconditional branch */
+    Compconst(s_branch); /* Compile unconditional branch */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get BEGIN address */
+    bp = (stackitem *)S0; /* Get BEGIN address */
     off = -(hptr - bp);
-    Compconst(off);		      /* Compile negative jumpback address */
+    Compconst(off); /* Compile negative jumpback address */
     Pop;
 }
 
-prim P_while()			      /* Compile WHILE */
+prim P_while() /* Compile WHILE */
 {
     Compiling;
     So(1);
-    Compconst(s_qbranch);	      /* Compile question branch */
-    Compconst(0);		      /* Compile place-holder address cell */
-    Push = (stackitem) (hptr - 1);    /* Queue backpatch for REPEAT */
+    Compconst(s_qbranch);         /* Compile question branch */
+    Compconst(0);                 /* Compile place-holder address cell */
+    Push = (stackitem)(hptr - 1); /* Queue backpatch for REPEAT */
 }
 
-prim P_repeat() 		      /* Compile REPEAT */
+prim P_repeat() /* Compile REPEAT */
 {
     stackitem off;
     stackitem *bp1, *bp;
@@ -2111,218 +2191,230 @@ prim P_repeat() 		      /* Compile REPEAT */
     Compiling;
     Sl(2);
     Hpc(S0);
-    bp1 = (stackitem *) S0;	      /* Get WHILE backpatch address */
+    bp1 = (stackitem *)S0; /* Get WHILE backpatch address */
     Pop;
-    Compconst(s_branch);	      /* Compile unconditional branch */
+    Compconst(s_branch); /* Compile unconditional branch */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get BEGIN address */
+    bp = (stackitem *)S0; /* Get BEGIN address */
     off = -(hptr - bp);
-    Compconst(off);		      /* Compile negative jumpback address */
-    *bp1 = hptr - bp1;                /* Backpatch REPEAT's jump out of loop */
+    Compconst(off);    /* Compile negative jumpback address */
+    *bp1 = hptr - bp1; /* Backpatch REPEAT's jump out of loop */
     Pop;
 }
 
-prim P_do()			      /* Compile DO */
+prim P_do() /* Compile DO */
 {
     Compiling;
-    Compconst(s_xdo);		      /* Compile runtime DO word */
+    Compconst(s_xdo); /* Compile runtime DO word */
     So(1);
-    Compconst(0);		      /* Reserve cell for LEAVE-taking */
-    Push = (stackitem) hptr;	      /* Save jump back address on stack */
+    Compconst(0);           /* Reserve cell for LEAVE-taking */
+    Push = (stackitem)hptr; /* Save jump back address on stack */
 }
 
-prim P_xdo()			      /* Execute DO */
+prim P_xdo() /* Execute DO */
 {
     Sl(2);
     Rso(3);
-    Rpush = ip + ((stackitem) *ip);   /* Push exit address from loop */
-    ip++;			      /* Increment past exit address word */
-    Rpush = (rstackitem) S1;	      /* Push loop limit on return stack */
-    Rpush = (rstackitem) S0;	      /* Iteration variable initial value to
+    Rpush = ip + ((stackitem)*ip); /* Push exit address from loop */
+    ip++;                          /* Increment past exit address word */
+    Rpush = (rstackitem)S1;        /* Push loop limit on return stack */
+    Rpush = (rstackitem)S0;        /* Iteration variable initial value to
 					 return stack */
     stk -= 2;
 }
 
-prim P_qdo()			      /* Compile ?DO */
+prim P_qdo() /* Compile ?DO */
 {
     Compiling;
-    Compconst(s_xqdo);		      /* Compile runtime ?DO word */
+    Compconst(s_xqdo); /* Compile runtime ?DO word */
     So(1);
-    Compconst(0);		      /* Reserve cell for LEAVE-taking */
-    Push = (stackitem) hptr;	      /* Save jump back address on stack */
+    Compconst(0);           /* Reserve cell for LEAVE-taking */
+    Push = (stackitem)hptr; /* Save jump back address on stack */
 }
 
-prim P_xqdo()			      /* Execute ?DO */
+prim P_xqdo() /* Execute ?DO */
 {
     Sl(2);
-    if (S0 == S1) {
-	ip += (stackitem) *ip;
-    } else {
-	Rso(3);
-	Rpush = ip + ((stackitem) *ip);/* Push exit address from loop */
-	ip++;			      /* Increment past exit address word */
-	Rpush = (rstackitem) S1;      /* Push loop limit on return stack */
-	Rpush = (rstackitem) S0;      /* Iteration variable initial value to
+    if (S0 == S1)
+    {
+        ip += (stackitem)*ip;
+    }
+    else
+    {
+        Rso(3);
+        Rpush = ip + ((stackitem)*ip); /* Push exit address from loop */
+        ip++;                          /* Increment past exit address word */
+        Rpush = (rstackitem)S1;        /* Push loop limit on return stack */
+        Rpush = (rstackitem)S0;        /* Iteration variable initial value to
 					 return stack */
     }
     stk -= 2;
 }
 
-prim P_loop()			      /* Compile LOOP */
+prim P_loop() /* Compile LOOP */
 {
     stackitem off;
     stackitem *bp;
 
     Compiling;
     Sl(1);
-    Compconst(s_xloop); 	      /* Compile runtime loop */
+    Compconst(s_xloop); /* Compile runtime loop */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get DO address */
+    bp = (stackitem *)S0; /* Get DO address */
     off = -(hptr - bp);
-    Compconst(off);		      /* Compile negative jumpback address */
-    *(bp - 1) = (hptr - bp) + 1;      /* Backpatch exit address offset */
+    Compconst(off);              /* Compile negative jumpback address */
+    *(bp - 1) = (hptr - bp) + 1; /* Backpatch exit address offset */
     Pop;
 }
 
-prim P_ploop()			      /* Compile +LOOP */
+prim P_ploop() /* Compile +LOOP */
 {
     stackitem off;
     stackitem *bp;
 
     Compiling;
     Sl(1);
-    Compconst(s_pxloop);	      /* Compile runtime +loop */
+    Compconst(s_pxloop); /* Compile runtime +loop */
     Hpc(S0);
-    bp = (stackitem *) S0;	      /* Get DO address */
+    bp = (stackitem *)S0; /* Get DO address */
     off = -(hptr - bp);
-    Compconst(off);		      /* Compile negative jumpback address */
-    *(bp - 1) = (hptr - bp) + 1;      /* Backpatch exit address offset */
+    Compconst(off);              /* Compile negative jumpback address */
+    *(bp - 1) = (hptr - bp) + 1; /* Backpatch exit address offset */
     Pop;
 }
 
-prim P_xloop()			      /* Execute LOOP */
+prim P_xloop() /* Execute LOOP */
 {
     Rsl(3);
-    R0 = (rstackitem) (((stackitem) R0) + 1);
-    if (((stackitem) R0) == ((stackitem) R1)) {
-	rstk -= 3;		      /* Pop iteration variable and limit */
-	ip++;			      /* Skip the jump address */
-    } else {
-	ip += (stackitem) *ip;
+    R0 = (rstackitem)(((stackitem)R0) + 1);
+    if (((stackitem)R0) == ((stackitem)R1))
+    {
+        rstk -= 3; /* Pop iteration variable and limit */
+        ip++;      /* Skip the jump address */
+    }
+    else
+    {
+        ip += (stackitem)*ip;
     }
 }
 
-prim P_xploop() 		      /* Execute +LOOP */
+prim P_xploop() /* Execute +LOOP */
 {
     stackitem niter;
 
     Sl(1);
     Rsl(3);
 
-    niter = ((stackitem) R0) + S0;
+    niter = ((stackitem)R0) + S0;
     Pop;
-    if ((niter >= ((stackitem) R1)) &&
-	(((stackitem) R0) < ((stackitem) R1))) {
-	rstk -= 3;		      /* Pop iteration variable and limit */
-	ip++;			      /* Skip the jump address */
-    } else {
-	ip += (stackitem) *ip;
-	R0 = (rstackitem) niter;
+    if ((niter >= ((stackitem)R1)) &&
+        (((stackitem)R0) < ((stackitem)R1)))
+    {
+        rstk -= 3; /* Pop iteration variable and limit */
+        ip++;      /* Skip the jump address */
+    }
+    else
+    {
+        ip += (stackitem)*ip;
+        R0 = (rstackitem)niter;
     }
 }
 
-prim P_leave()			      /* Compile LEAVE */
+prim P_leave() /* Compile LEAVE */
 {
     Rsl(3);
     ip = R2;
     rstk -= 3;
 }
 
-prim P_i()			      /* Obtain innermost loop index */
+prim P_i() /* Obtain innermost loop index */
 {
     Rsl(3);
     So(1);
-    Push = (stackitem) R0;            /* It's the top item on return stack */
+    Push = (stackitem)R0; /* It's the top item on return stack */
 }
 
-prim P_j()			      /* Obtain next-innermost loop index */
+prim P_j() /* Obtain next-innermost loop index */
 {
     Rsl(6);
     So(1);
-    Push = (stackitem) rstk[-4];      /* It's the 4th item on return stack */
+    Push = (stackitem)rstk[-4]; /* It's the 4th item on return stack */
 }
 
-prim P_quit()			      /* Terminate execution */
+prim P_quit() /* Terminate execution */
 {
-    rstk = rstack;		      /* Clear return stack */
+    rstk = rstack; /* Clear return stack */
 #ifdef WALKBACK
     wbptr = wback;
 #endif
-    ip = NULL;			      /* Stop execution of current word */
+    ip = NULL; /* Stop execution of current word */
 }
 
-prim P_abort()			      /* Abort, clearing data stack */
+prim P_abort() /* Abort, clearing data stack */
 {
-    P_clear();			      /* Clear the data stack */
-    P_quit();			      /* Shut down execution */
+    P_clear(); /* Clear the data stack */
+    P_quit();  /* Shut down execution */
 }
 
-prim P_abortq() 		      /* Abort, printing message */
+prim P_abortq() /* Abort, printing message */
 {
-    if (state) {
-	stringlit = True;	      /* Set string literal expected */
-	Compconst(s_abortq);	      /* Compile ourselves */
-    } else {
-        V printf("%s", (char *) ip);  /* Otherwise, print string literal
+    if (state)
+    {
+        stringlit = True;    /* Set string literal expected */
+        Compconst(s_abortq); /* Compile ourselves */
+    }
+    else
+    {
+        V printf("%s", (char *)ip); /* Otherwise, print string literal
 					 in in-line code. */
 #ifdef WALKBACK
-	pwalkback();
-#endif /* WALKBACK */
-	P_abort();		      /* Abort */
-	atl_comment = state = Falsity;/* Reset all interpretation state */
-	forgetpend = defpend = stringlit =
-		     tickpend = ctickpend = False;
+        pwalkback();
+#endif                                 /* WALKBACK */
+        P_abort();                     /* Abort */
+        atl_comment = state = Falsity; /* Reset all interpretation state */
+        forgetpend = defpend = stringlit =
+            tickpend = ctickpend = False;
     }
 }
 
 /*  Compilation primitives  */
 
-prim P_immediate()		      /* Mark most recent word immediate */
+prim P_immediate() /* Mark most recent word immediate */
 {
     dict->wname[0] |= IMMEDIATE;
 }
 
-prim P_lbrack() 		      /* Set interpret state */
+prim P_lbrack() /* Set interpret state */
 {
     Compiling;
     state = Falsity;
 }
 
-prim P_rbrack() 		      /* Restore compile state */
+prim P_rbrack() /* Restore compile state */
 {
     state = Truth;
 }
 
-Exported void P_dodoes()	      /* Execute indirect call on method */
+Exported void P_dodoes() /* Execute indirect call on method */
 {
     Rso(1);
     So(1);
-    Rpush = ip; 		      /* Push instruction pointer */
+    Rpush = ip; /* Push instruction pointer */
 #ifdef WALKBACK
-    *wbptr++ = curword; 	      /* Place word on walkback stack */
+    *wbptr++ = curword; /* Place word on walkback stack */
 #endif
     /* The compiler having craftily squirreled away the DOES> clause
        address before the word definition on the heap, we back up to
        the heap cell before the current word and load the pointer from
        there.  This is an ABSOLUTE heap address, not a relative offset. */
-    ip = *((dictword ***) (((stackitem *) curword) - 1));
+    ip = *((dictword ***)(((stackitem *)curword) - 1));
 
     /* Push the address of this word's body as the argument to the
        DOES> clause. */
-    Push = (stackitem) (((stackitem *) curword) + Dictwordl);
+    Push = (stackitem)(((stackitem *)curword) + Dictwordl);
 }
 
-prim P_does()			      /* Specify method for word */
+prim P_does() /* Specify method for word */
 {
 
     /* O.K., we were compiling our way through this definition and we've
@@ -2348,54 +2440,55 @@ prim P_does()			      /* Specify method for word */
        deallocate the heap word containing the link when a
        DOES>-defined word is deleted.  */
 
-    if (createword != NULL) {
-	stackitem *sp = ((stackitem *) createword), *hp;
+    if (createword != NULL)
+    {
+        stackitem *sp = ((stackitem *)createword), *hp;
 
-	Rsl(1);
-	Ho(1);
+        Rsl(1);
+        Ho(1);
 
-	/* Copy the word definition one word down in the heap to
+        /* Copy the word definition one word down in the heap to
 	   permit us to prefix it with the DOES clause address. */
 
-	for (hp = hptr - 1; hp >= sp; hp--)
-	    *(hp + 1) = *hp;
-	hptr++; 		      /* Expand allocated length of word */
-	*sp++ = (stackitem) ip;       /* Store DOES> clause address before
+        for (hp = hptr - 1; hp >= sp; hp--)
+            *(hp + 1) = *hp;
+        hptr++;                       /* Expand allocated length of word */
+        *sp++ = (stackitem)ip;        /* Store DOES> clause address before
                                          word's definition structure. */
-	createword = (dictword *) sp; /* Move word definition down 1 item */
-	createword->wcode = P_dodoes; /* Set code field to indirect jump */
+        createword = (dictword *)sp;  /* Move word definition down 1 item */
+        createword->wcode = P_dodoes; /* Set code field to indirect jump */
 
-	/* Now simulate an EXIT to bail out of the definition without
+        /* Now simulate an EXIT to bail out of the definition without
 	   executing the DOES> clause at definition time. */
 
-	ip = R0;		      /* Set IP to top of return stack */
+        ip = R0; /* Set IP to top of return stack */
 #ifdef WALKBACK
-	wbptr = (wbptr > wback) ? wbptr - 1 : wback;
+        wbptr = (wbptr > wback) ? wbptr - 1 : wback;
 #endif
-	Rpop;			      /* Pop the return stack */
+        Rpop; /* Pop the return stack */
     }
 }
 
-prim P_colon()			      /* Begin compilation */
+prim P_colon() /* Begin compilation */
 {
-    state = Truth;		      /* Set compilation underway */
-    P_create(); 		      /* Create conventional word */
+    state = Truth; /* Set compilation underway */
+    P_create();    /* Create conventional word */
 }
 
-prim P_semicolon()		      /* End compilation */
+prim P_semicolon() /* End compilation */
 {
     Compiling;
     Ho(1);
     Hstore = s_exit;
-    state = Falsity;		      /* No longer compiling */
+    state = Falsity; /* No longer compiling */
     /* We wait until now to plug the P_nest code so that it will be
        present only in completed definitions. */
     if (createword != NULL)
-	createword->wcode = P_nest;   /* Use P_nest for code */
-    createword = NULL;		      /* Flag no word being created */
+        createword->wcode = P_nest; /* Use P_nest for code */
+    createword = NULL;              /* Flag no word being created */
 }
 
-prim P_tick()			      /* Take address of next word */
+prim P_tick() /* Take address of next word */
 {
     int i;
 
@@ -2404,128 +2497,147 @@ prim P_tick()			      /* Take address of next word */
        report an error.  Since we can't call back to the
        calling program for more input, we're stuck. */
 
-    i = token(&instream);	      /* Scan for next token */
-    if (i != TokNull) {
-	if (i == TokWord) {
-	    dictword *di;
+    i = token(&instream); /* Scan for next token */
+    if (i != TokNull)
+    {
+        if (i == TokWord)
+        {
+            dictword *di;
 
-	    ucase(tokbuf);
-	    if ((di = lookup(tokbuf)) != NULL) {
-		So(1);
-		Push = (stackitem) di; /* Push word compile address */
-	    } else {
+            ucase(tokbuf);
+            if ((di = lookup(tokbuf)) != NULL)
+            {
+                So(1);
+                Push = (stackitem)di; /* Push word compile address */
+            }
+            else
+            {
                 V printf(" '%s' undefined ", tokbuf);
-	    }
-	} else {
+            }
+        }
+        else
+        {
             V printf("\nWord not specified when expected.\n");
-	    P_abort();
-	}
-    } else {
-	/* O.K., there was nothing in the input stream.  Set the
+            P_abort();
+        }
+    }
+    else
+    {
+        /* O.K., there was nothing in the input stream.  Set the
 	   tickpend flag to cause the compilation address of the next
            token to be pushed when it's supplied on a subsequent input
 	   line. */
-	if (ip == NULL) {
-	    tickpend = True;	      /* Set tick pending */
-	} else {
+        if (ip == NULL)
+        {
+            tickpend = True; /* Set tick pending */
+        }
+        else
+        {
             V printf("\nWord requested by ` not on same input line.\n");
-	    P_abort();
-	}
+            P_abort();
+        }
     }
 }
 
-prim P_bracktick()		      /* Compile in-line code address */
+prim P_bracktick() /* Compile in-line code address */
 {
     Compiling;
-    ctickpend = True;		      /* Force literal treatment of next
+    ctickpend = True; /* Force literal treatment of next
 					 word in compile stream */
 }
 
-prim P_execute()		      /* Execute word pointed to by stack */
+prim P_execute() /* Execute word pointed to by stack */
 {
     dictword *wp;
 
     Sl(1);
-    wp = (dictword *) S0;	      /* Load word address from stack */
-    Pop;			      /* Pop data stack before execution */
-    exword(wp); 		      /* Recursively call exword() to run
+    wp = (dictword *)S0; /* Load word address from stack */
+    Pop;                 /* Pop data stack before execution */
+    exword(wp);          /* Recursively call exword() to run
 					 the word. */
 }
 
-prim P_body()			      /* Get body address for word */
+prim P_body() /* Get body address for word */
 {
     Sl(1);
     S0 += Dictwordl * sizeof(stackitem);
 }
 
-prim P_state()			      /* Get state of system */
+prim P_state() /* Get state of system */
 {
     So(1);
-    Push = (stackitem) &state;
+    Push = (stackitem)&state;
 }
 
 /*  Definition field access primitives	*/
 
 #ifdef DEFFIELDS
 
-prim P_find()			      /* Look up word in dictionary */
+prim P_find() /* Look up word in dictionary */
 {
     dictword *dw;
 
     Sl(1);
     So(1);
     Hpc(S0);
-    V strcpy(tokbuf, (char *) S0);    /* Use built-in token buffer... */
-    dw = lookup(tokbuf);              /* So ucase() in lookup() doesn't wipe */
-				      /* the token on the stack */
-    if (dw != NULL) {
-	S0 = (stackitem) dw;
-	/* Push immediate flag */
-	Push = (dw->wname[0] & IMMEDIATE) ? 1 : -1;
-    } else {
-	Push = 0;
+    V strcpy(tokbuf, (char *)S0); /* Use built-in token buffer... */
+    dw = lookup(tokbuf);          /* So ucase() in lookup() doesn't wipe */
+                                  /* the token on the stack */
+    if (dw != NULL)
+    {
+        S0 = (stackitem)dw;
+        /* Push immediate flag */
+        Push = (dw->wname[0] & IMMEDIATE) ? 1 : -1;
+    }
+    else
+    {
+        Push = 0;
     }
 }
 
-#define DfOff(fld)  (((char *) &(dict->fld)) - ((char *) dict))
+#define DfOff(fld) (((char *)&(dict->fld)) - ((char *)dict))
 
-prim P_toname() 		      /* Find name field from compile addr */
+prim P_toname() /* Find name field from compile addr */
 {
     Sl(1);
     S0 += DfOff(wname);
 }
 
-prim P_tolink() 		      /* Find link field from compile addr */
+prim P_tolink() /* Find link field from compile addr */
 {
-if (DfOff(wnext) != 0) V printf("\n>LINK Foulup--wnext is not at zero!\n");
-/*  Sl(1);
-    S0 += DfOff(wnext);  */	      /* Null operation.  Wnext is first */
+    if (DfOff(wnext) != 0)
+        V printf("\n>LINK Foulup--wnext is not at zero!\n");
+    /*  Sl(1);
+    S0 += DfOff(wnext);  */
+    /* Null operation.  Wnext is first */
 }
 
-prim P_frombody()		      /* Get compile address from body */
+prim P_frombody() /* Get compile address from body */
 {
     Sl(1);
     S0 -= Dictwordl * sizeof(stackitem);
 }
 
-prim P_fromname()		      /* Get compile address from name */
+prim P_fromname() /* Get compile address from name */
 {
     Sl(1);
     S0 -= DfOff(wname);
 }
 
-prim P_fromlink()		      /* Get compile address from link */
+prim P_fromlink() /* Get compile address from link */
 {
-if (DfOff(wnext) != 0) V printf("\nLINK> Foulup--wnext is not at zero!\n");
-/*  Sl(1);
-    S0 -= DfOff(wnext);  */	      /* Null operation.  Wnext is first */
+    if (DfOff(wnext) != 0)
+        V printf("\nLINK> Foulup--wnext is not at zero!\n");
+    /*  Sl(1);
+    S0 -= DfOff(wnext);  */
+    /* Null operation.  Wnext is first */
 }
 
 #undef DfOff
 
-#define DfTran(from,to) (((char *) &(dict->to)) - ((char *) &(dict->from)))
+#define DfTran(from, to) (((char *)&(dict->to)) - ((char *)&(dict->from)))
 
-prim P_nametolink()		      /* Get from name field to link */
+prim P_nametolink() /* Get from name field to link */
 {
     char *from, *to;
 
@@ -2533,12 +2645,12 @@ prim P_nametolink()		      /* Get from name field to link */
     /*
     S0 -= DfTran(wnext, wname);
     */
-    from = (char *) &(dict->wnext);
-    to = (char *) &(dict->wname);
+    from = (char *)&(dict->wnext);
+    to = (char *)&(dict->wname);
     S0 -= (to - from);
 }
 
-prim P_linktoname()		      /* Get from link field to name */
+prim P_linktoname() /* Get from link field to name */
 {
     char *from, *to;
 
@@ -2546,14 +2658,14 @@ prim P_linktoname()		      /* Get from link field to name */
     /*
     S0 += DfTran(wnext, wname);
     */
-    from = (char *) &(dict->wnext);
-    to = (char *) &(dict->wname);
+    from = (char *)&(dict->wnext);
+    to = (char *)&(dict->wname);
     S0 += (to - from);
 }
 
-prim P_fetchname()		      /* Copy word name to string buffer */
+prim P_fetchname() /* Copy word name to string buffer */
 {
-    Sl(2);			      /* nfa string -- */
+    Sl(2); /* nfa string -- */
     Hpc(S0);
     Hpc(S1);
     /* Since the name buffers aren't in the system heap, but
@@ -2562,22 +2674,22 @@ prim P_fetchname()		      /* Copy word name to string buffer */
        futzing with word dictionary items on the heap in the first
        place, there's a billion other ways to bring us down at
        his command. */
-    V strcpy((char *) S0, *((char **) S1) + 1);
+    V strcpy((char *)S0, *((char **)S1) + 1);
     Pop2;
 }
 
-prim P_storename()		      /* Store string buffer in word name */
+prim P_storename() /* Store string buffer in word name */
 {
     char tflags;
     char *cp;
 
-    Sl(2);			      /* string nfa -- */
-    Hpc(S0);			      /* See comments in P_fetchname above */
-    Hpc(S1);			      /* checking name pointers */
-    tflags = **((char **) S0);
-    free(*((char **) S0));
-    *((char **) S0) = cp = alloc((unsigned int) (strlen((char *) S1) + 2));
-    V strcpy(cp + 1, (char *) S1);
+    Sl(2);   /* string nfa -- */
+    Hpc(S0); /* See comments in P_fetchname above */
+    Hpc(S1); /* checking name pointers */
+    tflags = **((char **)S0);
+    free(*((char **)S0));
+    *((char **)S0) = cp = alloc((unsigned int)(strlen((char *)S1) + 2));
+    V strcpy(cp + 1, (char *)S1);
     *cp = tflags;
     Pop2;
 }
@@ -2586,15 +2698,15 @@ prim P_storename()		      /* Store string buffer in word name */
 
 #ifdef SYSTEM
 prim P_system()
-{				      /* string -- status */
+{ /* string -- status */
     Sl(1);
     Hpc(S0);
-    S0 = system((char *) S0);
+    S0 = system((char *)S0);
 }
 #endif /* SYSTEM */
 
 #ifdef TRACE
-prim P_trace()			      /* Set or clear tracing of execution */
+prim P_trace() /* Set or clear tracing of execution */
 {
     Sl(1);
     atl_trace = (S0 == 0) ? Falsity : Truth;
@@ -2603,7 +2715,7 @@ prim P_trace()			      /* Set or clear tracing of execution */
 #endif /* TRACE */
 
 #ifdef WALKBACK
-prim P_walkback()		      /* Set or clear error walkback */
+prim P_walkback() /* Set or clear error walkback */
 {
     Sl(1);
     atl_walkback = (S0 == 0) ? Falsity : Truth;
@@ -2613,38 +2725,44 @@ prim P_walkback()		      /* Set or clear error walkback */
 
 #ifdef WORDSUSED
 
-prim P_wordsused()		      /* List words used by program */
+prim P_wordsused() /* List words used by program */
 {
     dictword *dw = dict;
 
-    while (dw != NULL) {
-	if (*(dw->wname) & WORDUSED) {
-           V printf("\n%s", dw->wname + 1);
-	}
+    while (dw != NULL)
+    {
+        if (*(dw->wname) & WORDUSED)
+        {
+            V printf("\n%s", dw->wname + 1);
+        }
 #ifdef Keyhit
-	if (kbquit()) {
-	    break;
-	}
+        if (kbquit())
+        {
+            break;
+        }
 #endif
-	dw = dw->wnext;
+        dw = dw->wnext;
     }
     V printf("\n");
 }
 
-prim P_wordsunused()		      /* List words not used by program */
+prim P_wordsunused() /* List words not used by program */
 {
     dictword *dw = dict;
 
-    while (dw != NULL) {
-	if (!(*(dw->wname) & WORDUSED)) {
-           V printf("\n%s", dw->wname + 1);
-	}
+    while (dw != NULL)
+    {
+        if (!(*(dw->wname) & WORDUSED))
+        {
+            V printf("\n%s", dw->wname + 1);
+        }
 #ifdef Keyhit
-	if (kbquit()) {
-	    break;
-	}
+        if (kbquit())
+        {
+            break;
+        }
 #endif
-	dw = dw->wnext;
+        dw = dw->wnext;
     }
     V printf("\n");
 }
@@ -2652,38 +2770,38 @@ prim P_wordsunused()		      /* List words not used by program */
 
 #ifdef COMPILERW
 
-prim P_brackcompile()		      /* Force compilation of immediate word */
+prim P_brackcompile() /* Force compilation of immediate word */
 {
     Compiling;
-    cbrackpend = True;		      /* Set [COMPILE] pending */
+    cbrackpend = True; /* Set [COMPILE] pending */
 }
 
-prim P_literal()		      /* Compile top of stack as literal */
+prim P_literal() /* Compile top of stack as literal */
 {
     Compiling;
     Sl(1);
     Ho(2);
-    Hstore = s_lit;		      /* Compile load literal word */
-    Hstore = S0;		      /* Compile top of stack in line */
+    Hstore = s_lit; /* Compile load literal word */
+    Hstore = S0;    /* Compile top of stack in line */
     Pop;
 }
 
-prim P_compile()		      /* Compile address of next inline word */
+prim P_compile() /* Compile address of next inline word */
 {
     Compiling;
     Ho(1);
-    Hstore = (stackitem) *ip++;       /* Compile the next datum from the
+    Hstore = (stackitem)*ip++; /* Compile the next datum from the
 					 instruction stream. */
 }
 
-prim P_backmark()		      /* Mark backward backpatch address */
+prim P_backmark() /* Mark backward backpatch address */
 {
     Compiling;
     So(1);
-    Push = (stackitem) hptr;	      /* Push heap address onto stack */
+    Push = (stackitem)hptr; /* Push heap address onto stack */
 }
 
-prim P_backresolve()		      /* Emit backward jump offset */
+prim P_backresolve() /* Emit backward jump offset */
 {
     stackitem offset;
 
@@ -2691,28 +2809,28 @@ prim P_backresolve()		      /* Emit backward jump offset */
     Sl(1);
     Ho(1);
     Hpc(S0);
-    offset = -(hptr - (stackitem *) S0);
+    offset = -(hptr - (stackitem *)S0);
     Hstore = offset;
     Pop;
 }
 
-prim P_fwdmark()		      /* Mark forward backpatch address */
+prim P_fwdmark() /* Mark forward backpatch address */
 {
     Compiling;
     Ho(1);
-    Push = (stackitem) hptr;	      /* Push heap address onto stack */
+    Push = (stackitem)hptr; /* Push heap address onto stack */
     Hstore = 0;
 }
 
-prim P_fwdresolve()		      /* Emit forward jump offset */
+prim P_fwdresolve() /* Emit forward jump offset */
 {
     stackitem offset;
 
     Compiling;
     Sl(1);
     Hpc(S0);
-    offset = (hptr - (stackitem *) S0);
-    *((stackitem *) S0) = offset;
+    offset = (hptr - (stackitem *)S0);
+    *((stackitem *)S0) = offset;
     Pop;
 }
 
@@ -2973,16 +3091,14 @@ static struct primfcn primt[] = {
     {"0EVALUATE", P_evaluate},
 #endif /* EVALUATE */
 
-    {NULL, (codeptr) 0}
-};
+    {NULL, (codeptr)0}};
 
 /*  ATL_PRIMDEF  --  Initialise the dictionary with the built-in primitive
 		     words.  To save the memory overhead of separately
 		     allocated word items, we get one buffer for all
 		     the items and link them internally within the buffer. */
 
-Exported void atl_primdef(pt)
-  struct primfcn *pt;
+Exported void atl_primdef(pt) struct primfcn *pt;
 {
     struct primfcn *pf = pt;
     dictword *nw;
@@ -2996,44 +3112,49 @@ Exported void atl_primdef(pt)
 
     /* Count the number of definitions in the table. */
 
-    while (pf->pname != NULL) {
-	n++;
-	pf++;
+    while (pf->pname != NULL)
+    {
+        n++;
+        pf++;
     }
 
 #ifdef WORDSUSED
 #ifdef READONLYSTRINGS
     nltotal = n;
-    for (i = 0; i < n; i++) {
-	nltotal += strlen(pt[i].pname);
+    for (i = 0; i < n; i++)
+    {
+        nltotal += strlen(pt[i].pname);
     }
     cp = dynames = alloc(nltotal);
-    for (i = 0; i < n; i++) {
-	strcpy(cp, pt[i].pname);
-	cp += strlen(cp) + 1;
+    for (i = 0; i < n; i++)
+    {
+        strcpy(cp, pt[i].pname);
+        cp += strlen(cp) + 1;
     }
     cp = dynames;
 #endif /* READONLYSTRINGS */
 #endif /* WORDSUSED */
 
-    nw = (dictword *) alloc((unsigned int) (n * sizeof(dictword)));
+    nw = (dictword *)alloc((unsigned int)(n * sizeof(dictword)));
 
     nw[n - 1].wnext = dict;
     dict = nw;
-    for (i = 0; i < n; i++) {
-	nw->wname = pt->pname;
+    for (i = 0; i < n; i++)
+    {
+        nw->wname = pt->pname;
 #ifdef WORDSUSED
 #ifdef READONLYSTRINGS
-    	nw->wname = cp;
-	cp += strlen(cp) + 1;
+        nw->wname = cp;
+        cp += strlen(cp) + 1;
 #endif /* READONLYSTRINGS */
 #endif /* WORDSUSED */
-	nw->wcode = pt->pcode;
-	if (i != (n - 1)) {
-	    nw->wnext = nw + 1;
-	}
-	nw++;
-	pt++;
+        nw->wcode = pt->pcode;
+        if (i != (n - 1))
+        {
+            nw->wnext = nw + 1;
+        }
+        nw++;
+        pt++;
     }
 }
 
@@ -3043,43 +3164,44 @@ Exported void atl_primdef(pt)
 
 static void pwalkback()
 {
-    if (atl_walkback && ((curword != NULL) || (wbptr > wback))) {
+    if (atl_walkback && ((curword != NULL) || (wbptr > wback)))
+    {
         V printf("Walkback:\n");
-	if (curword != NULL) {
+        if (curword != NULL)
+        {
             V printf("   %s\n", curword->wname + 1);
-	}
-	while (wbptr > wback) {
-	    dictword *wb = *(--wbptr);
+        }
+        while (wbptr > wback)
+        {
+            dictword *wb = *(--wbptr);
             V printf("   %s\n", wb->wname + 1);
-	}
+        }
     }
 }
 #endif /* WALKBACK */
 
 /*  TROUBLE  --  Common handler for serious errors.  */
 
-static void trouble(kind)
-  char *kind;
+static void trouble(kind) char *kind;
 {
 #ifdef MEMMESSAGE
     V printf("\n%s.\n", kind);
 #endif
 #ifdef WALKBACK
     pwalkback();
-#endif /* WALKBACK */
-    P_abort();			      /* Abort */
-    atl_comment = state = Falsity;    /* Reset all interpretation state */
+#endif                             /* WALKBACK */
+    P_abort();                     /* Abort */
+    atl_comment = state = Falsity; /* Reset all interpretation state */
     forgetpend = defpend = stringlit =
-	tickpend = ctickpend = False;
+        tickpend = ctickpend = False;
 }
 
 /*  ATL_ERROR  --  Handle error detected by user-defined primitive.  */
 
-Exported void atl_error(kind)
-  char *kind;
+Exported void atl_error(kind) char *kind;
 {
     trouble(kind);
-    evalstat = ATL_APPLICATION;       /* Signify application-detected error */
+    evalstat = ATL_APPLICATION; /* Signify application-detected error */
 }
 
 #ifndef NOMEMCHECK
@@ -3156,33 +3278,37 @@ static void divzero()
 /*  EXWORD  --	Execute a word (and any sub-words it may invoke). */
 
 static void exword(wp)
-  dictword *wp;
+    dictword *wp;
 {
     curword = wp;
 #ifdef TRACE
-    if (atl_trace) {
+    if (atl_trace)
+    {
         V printf("\nTrace: %s ", curword->wname + 1);
     }
-#endif /* TRACE */
-    (*curword->wcode)();	      /* Execute the first word */
-    while (ip != NULL) {
+#endif                   /* TRACE */
+    (*curword->wcode)(); /* Execute the first word */
+    while (ip != NULL)
+    {
 #ifdef BREAK
 #ifdef Keybreak
-	Keybreak();		      /* Poll for asynchronous interrupt */
+        Keybreak(); /* Poll for asynchronous interrupt */
 #endif
-	if (broken) {		      /* Did we receive a break signal */
+        if (broken)
+        { /* Did we receive a break signal */
             trouble("Break signal");
-	    evalstat = ATL_BREAK;
-	    break;
-	}
+            evalstat = ATL_BREAK;
+            break;
+        }
 #endif /* BREAK */
-	curword = *ip++;
+        curword = *ip++;
 #ifdef TRACE
-	if (atl_trace) {
+        if (atl_trace)
+        {
             V printf("\nTrace: %s ", curword->wname + 1);
-	}
-#endif /* TRACE */
-	(*curword->wcode)();	      /* Execute the next word */
+        }
+#endif                       /* TRACE */
+        (*curword->wcode)(); /* Execute the next word */
     }
     curword = NULL;
 }
@@ -3198,14 +3324,18 @@ static void exword(wp)
 
 void atl_init()
 {
-    if (dict == NULL) {
-	atl_primdef(primt);	      /* Define primitive words */
-	dictprot = dict;	      /* Set protected mark in dictionary */
+    if (dict == NULL)
+    {
+        atl_primdef(primt); /* Define primitive words */
+        dictprot = dict;    /* Set protected mark in dictionary */
 
-	/* Look up compiler-referenced words in the new dictionary and
+        /* Look up compiler-referenced words in the new dictionary and
 	   save their compile addresses in static variables. */
 
-#define Cconst(cell, name)  cell = (stackitem) lookup(name); if(cell==0)abort()
+#define Cconst(cell, name)          \
+    cell = (stackitem)lookup(name); \
+    if (cell == 0)                  \
+    abort()
         Cconst(s_exit, "EXIT");
         Cconst(s_lit, "(LIT)");
         Cconst(s_flit, "(FLIT)");
@@ -3220,105 +3350,113 @@ void atl_init()
         Cconst(s_abortq, "ABORT\"");
 #undef Cconst
 
-	if (stack == NULL) {	      /* Allocate stack if needed */
-	    stack = (stackitem *)
-		alloc(((unsigned int) atl_stklen) * sizeof(stackitem));
-	}
-	stk = stackbot = stack;
+        if (stack == NULL)
+        { /* Allocate stack if needed */
+            stack = (stackitem *)
+                alloc(((unsigned int)atl_stklen) * sizeof(stackitem));
+        }
+        stk = stackbot = stack;
 #ifdef MEMSTAT
-	stackmax = stack;
+        stackmax = stack;
 #endif
-	stacktop = stack + atl_stklen;
-	if (rstack == NULL) {	      /* Allocate return stack if needed */
-	    rstack = (dictword ***)
-		alloc(((unsigned int) atl_rstklen) *
-		sizeof(dictword **));
-	}
-	rstk = rstackbot = rstack;
+        stacktop = stack + atl_stklen;
+        if (rstack == NULL)
+        { /* Allocate return stack if needed */
+            rstack = (dictword ***)
+                alloc(((unsigned int)atl_rstklen) *
+                      sizeof(dictword **));
+        }
+        rstk = rstackbot = rstack;
 #ifdef MEMSTAT
-	rstackmax = rstack;
+        rstackmax = rstack;
 #endif
-	rstacktop = rstack + atl_rstklen;
+        rstacktop = rstack + atl_rstklen;
 #ifdef WALKBACK
-	if (wback == NULL) {
-	    wback = (dictword **) alloc(((unsigned int) atl_rstklen) *
-				    sizeof(dictword *));
-	}
-	wbptr = wback;
+        if (wback == NULL)
+        {
+            wback = (dictword **)alloc(((unsigned int)atl_rstklen) *
+                                       sizeof(dictword *));
+        }
+        wbptr = wback;
 #endif
-	if (heap == NULL) {
+        if (heap == NULL)
+        {
 
-	    /* The temporary string buffers are placed at the start of the
+            /* The temporary string buffers are placed at the start of the
 	       heap, which permits us to pointer-check pointers into them
 	       as within the heap extents.  Hence, the size of the buffer
 	       we acquire for the heap is the sum of the heap and temporary
 	       string requests. */
 
-	    int i;
-	    char *cp;
+            int i;
+            char *cp;
 
-	    /* Force length of temporary strings to even number of
+            /* Force length of temporary strings to even number of
 	       stackitems. */
-	    atl_ltempstr += sizeof(stackitem) -
-		(atl_ltempstr % sizeof(stackitem));
-	    cp = alloc((((unsigned int) atl_heaplen) * sizeof(stackitem)) +
-			((unsigned int) (atl_ntempstr * atl_ltempstr)));
-	    heapbot = (stackitem *) cp;
-	    strbuf = (char **) alloc(((unsigned int) atl_ntempstr) *
-				sizeof(char *));
-	    for (i = 0; i < atl_ntempstr; i++) {
-		strbuf[i] = cp;
-		cp += ((unsigned int) atl_ltempstr);
-	    }
-	    cstrbuf = 0;
-	    heap = (stackitem *) cp;  /* Allocatable heap starts after
+            atl_ltempstr += sizeof(stackitem) -
+                            (atl_ltempstr % sizeof(stackitem));
+            cp = alloc((((unsigned int)atl_heaplen) * sizeof(stackitem)) +
+                       ((unsigned int)(atl_ntempstr * atl_ltempstr)));
+            heapbot = (stackitem *)cp;
+            strbuf = (char **)alloc(((unsigned int)atl_ntempstr) *
+                                    sizeof(char *));
+            for (i = 0; i < atl_ntempstr; i++)
+            {
+                strbuf[i] = cp;
+                cp += ((unsigned int)atl_ltempstr);
+            }
+            cstrbuf = 0;
+            heap = (stackitem *)cp; /* Allocatable heap starts after
 					 the temporary strings */
-	}
-	/* The system state word is kept in the first word of the heap
+        }
+        /* The system state word is kept in the first word of the heap
            so that pointer checking doesn't bounce references to it.
 	   When creating the heap, we preallocate this word and initialise
 	   the state to the interpretive state. */
-	hptr = heap + 1;
-	state = Falsity;
+        hptr = heap + 1;
+        state = Falsity;
 #ifdef MEMSTAT
-	heapmax = hptr;
+        heapmax = hptr;
 #endif
-	heaptop = heap + atl_heaplen;
+        heaptop = heap + atl_heaplen;
 
-	/* Now that dynamic memory is up and running, allocate constants
+        /* Now that dynamic memory is up and running, allocate constants
 	   and variables built into the system.  */
 
 #ifdef FILEIO
-	{   static struct {
-		char *sfn;
-		FILE *sfd;
-	    } stdfiles[] = {
+        {
+            static struct
+            {
+                char *sfn;
+                FILE *sfd;
+            } stdfiles[] = {
                 {"STDIN", NULL},
                 {"STDOUT", NULL},
-                {"STDERR", NULL}
-	    };
-	    int i;
-	    dictword *dw;
+                {"STDERR", NULL}};
+            int i;
+            dictword *dw;
 
-    	    /* On some systems stdin, stdout, and stderr aren't
+            /* On some systems stdin, stdout, and stderr aren't
 	       constants which can appear in an initialisation.
 	       So, we initialise them at runtime here. */
-	       
-    	    stdfiles[0].sfd = stdin;
-	    stdfiles[1].sfd = stdout;
-	    stdfiles[2].sfd = stderr;
-	    
-	    for (i = 0; i < ELEMENTS(stdfiles); i++) {
-		if ((dw = atl_vardef(stdfiles[i].sfn,
-			2 * sizeof(stackitem))) != NULL) {
-		    stackitem *si = atl_body(dw);
-		    *si++ = FileSent;
-		    *si = (stackitem) stdfiles[i].sfd;
-		}
-	    }
-	}
-#endif /* FILEIO */
-	dictprot = dict;	      /* Protect all standard words */
+
+            stdfiles[0].sfd = stdin;
+            stdfiles[1].sfd = stdout;
+            stdfiles[2].sfd = stderr;
+
+            for (i = 0; i < ELEMENTS(stdfiles); i++)
+            {
+                if ((dw = atl_vardef(stdfiles[i].sfn,
+                                     2 * sizeof(stackitem))) != NULL)
+                {
+                    stackitem *si = atl_body(dw);
+                    *si++ = FileSent;
+                    *si = (stackitem)stdfiles[i].sfd;
+                }
+            }
+        }
+#endif                   /* FILEIO */
+        dictprot = dict; /* Protect all standard words */
     }
 }
 
@@ -3326,21 +3464,20 @@ void atl_init()
                     word item if found or NULL if the word isn't
 		    in the dictionary. */
 
-dictword *atl_lookup(name)
-  char *name;
+dictword *atl_lookup(name) char *name;
 {
-    V strcpy(tokbuf, name);	      /* Use built-in token buffer... */
-    ucase(tokbuf);                    /* so ucase() doesn't wreck arg string */
-    return lookup(tokbuf);	      /* Now use normal lookup() on it */
+    V strcpy(tokbuf, name); /* Use built-in token buffer... */
+    ucase(tokbuf);          /* so ucase() doesn't wreck arg string */
+    return lookup(tokbuf);  /* Now use normal lookup() on it */
 }
 
 /*  ATL_BODY  --  Returns the address of the body of a word, given
 		  its dictionary entry. */
 
 stackitem *atl_body(dw)
-  dictword *dw;
+    dictword *dw;
 {
-    return ((stackitem *) dw) + Dictwordl;
+    return ((stackitem *)dw) + Dictwordl;
 }
 
 /*  ATL_EXEC  --  Execute a word, given its dictionary address.  The
@@ -3349,24 +3486,25 @@ stackitem *atl_body(dw)
 		  preserved. */
 
 int atl_exec(dw)
-  dictword *dw;
+    dictword *dw;
 {
     int sestat = evalstat, restat;
 
     evalstat = ATL_SNORM;
 #ifdef BREAK
-    broken = False;		      /* Reset break received */
+    broken = False; /* Reset break received */
 #endif
 #undef Memerrs
 #define Memerrs evalstat
     Rso(1);
-    Rpush = ip; 		      /* Push instruction pointer */
-    ip = NULL;			      /* Keep exword from running away */
+    Rpush = ip; /* Push instruction pointer */
+    ip = NULL;  /* Keep exword from running away */
     exword(dw);
-    if (evalstat == ATL_SNORM) {      /* If word ran to completion */
-	Rsl(1);
-	ip = R0;		      /* Pop the return stack */
-	Rpop;
+    if (evalstat == ATL_SNORM)
+    { /* If word ran to completion */
+        Rsl(1);
+        ip = R0; /* Pop the return stack */
+        Rpop;
     }
 #undef Memerrs
 #define Memerrs
@@ -3383,9 +3521,8 @@ int atl_exec(dw)
 		    the dictionary item for the new word, or NULL if
 		    the heap overflows. */
 
-dictword *atl_vardef(name, size)
-  char *name;
-  int size;
+dictword *atl_vardef(name, size) char *name;
+int size;
 {
     dictword *di;
     int isize = (size + (sizeof(stackitem) - 1)) / sizeof(stackitem);
@@ -3396,38 +3533,39 @@ dictword *atl_vardef(name, size)
     Ho(Dictwordl + isize);
 #undef Memerrs
 #define Memerrs
-    if (evalstat != ATL_SNORM)	      /* Did the heap overflow */
-	return NULL;		      /* Yes.  Return NULL */
-    createword = (dictword *) hptr;   /* Develop address of word */
-    createword->wcode = P_var;	      /* Store default code */
-    hptr += Dictwordl;		      /* Allocate heap space for word */
-    while (isize > 0) {
-	Hstore = 0;		      /* Allocate heap area and clear it */
-	isize--;
+    if (evalstat != ATL_SNORM)     /* Did the heap overflow */
+        return NULL;               /* Yes.  Return NULL */
+    createword = (dictword *)hptr; /* Develop address of word */
+    createword->wcode = P_var;     /* Store default code */
+    hptr += Dictwordl;             /* Allocate heap space for word */
+    while (isize > 0)
+    {
+        Hstore = 0; /* Allocate heap area and clear it */
+        isize--;
     }
-    V strcpy(tokbuf, name);	      /* Use built-in token buffer... */
-    ucase(tokbuf);                    /* so ucase() doesn't wreck arg string */
-    enter(tokbuf);		      /* Make dictionary entry for it */
-    di = createword;		      /* Save word address */
-    createword = NULL;		      /* Mark no word underway */
-    return di;			      /* Return new word */
+    V strcpy(tokbuf, name); /* Use built-in token buffer... */
+    ucase(tokbuf);          /* so ucase() doesn't wreck arg string */
+    enter(tokbuf);          /* Make dictionary entry for it */
+    di = createword;        /* Save word address */
+    createword = NULL;      /* Mark no word underway */
+    return di;              /* Return new word */
 }
 
 /*  ATL_MARK  --  Mark current state of the system.  */
 
 void atl_mark(mp)
-  atl_statemark *mp;
+    atl_statemark *mp;
 {
-    mp->mstack = stk;		      /* Save stack position */
-    mp->mheap = hptr;		      /* Save heap allocation marker */
-    mp->mrstack = rstk; 	      /* Set return stack pointer */
-    mp->mdict = dict;		      /* Save last item in dictionary */
+    mp->mstack = stk;   /* Save stack position */
+    mp->mheap = hptr;   /* Save heap allocation marker */
+    mp->mrstack = rstk; /* Set return stack pointer */
+    mp->mdict = dict;   /* Save last item in dictionary */
 }
 
 /*  ATL_UNWIND	--  Restore system state to previously saved state.  */
 
 void atl_unwind(mp)
-  atl_statemark *mp;
+    atl_statemark *mp;
 {
 
     /* If atl_mark() was called before the system was initialised, and
@@ -3435,21 +3573,22 @@ void atl_unwind(mp)
        unwind request.	The user must manually atl_init before an
        atl_mark() request is made. */
 
-    if (mp->mdict == NULL)	      /* Was mark made before atl_init ? */
-	return; 		      /* Yes.  Cannot unwind past init */
+    if (mp->mdict == NULL) /* Was mark made before atl_init ? */
+        return;            /* Yes.  Cannot unwind past init */
 
-    stk = mp->mstack;		      /* Roll back stack allocation */
-    hptr = mp->mheap;		      /* Reset heap state */
-    rstk = mp->mrstack; 	      /* Reset the return stack */
+    stk = mp->mstack;   /* Roll back stack allocation */
+    hptr = mp->mheap;   /* Reset heap state */
+    rstk = mp->mrstack; /* Reset the return stack */
 
     /* To unwind the dictionary, we can't just reset the pointer,
        we must walk back through the chain and release all the name
        buffers attached to the items allocated after the mark was
        made. */
 
-    while (dict != NULL && dict != dictprot && dict != mp->mdict) {
-	free(dict->wname);	      /* Release name string for item */
-	dict = dict->wnext;	      /* Link to previous item */
+    while (dict != NULL && dict != dictprot && dict != mp->mdict)
+    {
+        free(dict->wname);  /* Release name string for item */
+        dict = dict->wnext; /* Link to previous item */
     }
 }
 
@@ -3464,47 +3603,50 @@ void atl_unwind(mp)
 
 void atl_break()
 {
-    broken = True;		      /* Set break request */
+    broken = True; /* Set break request */
 }
 #endif /* BREAK */
 
 /*  ATL_LOAD  --  Load a file into the system.	*/
 
 int atl_load(fp)
-  FILE *fp;
+    FILE *fp;
 {
     int es = ATL_SNORM;
     char s[134];
     atl_statemark mk;
-    atl_int scomm = atl_comment;      /* Stack comment pending state */
-    dictword **sip = ip;	      /* Stack instruction pointer */
-    char *sinstr = instream;	      /* Stack input stream */
-    int lineno = 0;		      /* Current line number */
+    atl_int scomm = atl_comment; /* Stack comment pending state */
+    dictword **sip = ip;         /* Stack instruction pointer */
+    char *sinstr = instream;     /* Stack input stream */
+    int lineno = 0;              /* Current line number */
 
-    atl_errline = 0;		      /* Reset line number of error */
+    atl_errline = 0; /* Reset line number of error */
     atl_mark(&mk);
-    ip = NULL;			      /* Fool atl_eval into interp state */
-    while (atl_fgetsp(s, 132, fp) != NULL) {
-	lineno++;
-	if ((es = atl_eval(s)) != ATL_SNORM) {
-	    atl_errline = lineno;     /* Save line number of error */
-	    atl_unwind(&mk);
-	    break;
-	}
+    ip = NULL; /* Fool atl_eval into interp state */
+    while (atl_fgetsp(s, 132, fp) != NULL)
+    {
+        lineno++;
+        if ((es = atl_eval(s)) != ATL_SNORM)
+        {
+            atl_errline = lineno; /* Save line number of error */
+            atl_unwind(&mk);
+            break;
+        }
     }
     /* If there were no other errors, check for a runaway comment.  If
        we ended the file in comment-ignore mode, set the runaway comment
        error status and unwind the file.  */
-    if ((es == ATL_SNORM) && (atl_comment == Truth)) {
+    if ((es == ATL_SNORM) && (atl_comment == Truth))
+    {
 #ifdef MEMMESSAGE
         V printf("\nRunaway `(' comment.\n");
 #endif
-	es = ATL_RUNCOMM;
-	atl_unwind(&mk);
+        es = ATL_RUNCOMM;
+        atl_unwind(&mk);
     }
-    atl_comment = scomm;	      /* Unstack comment pending status */
-    ip = sip;			      /* Unstack instruction pointer */
-    instream = sinstr;		      /* Unstack input stream */
+    atl_comment = scomm; /* Unstack comment pending status */
+    ip = sip;            /* Unstack instruction pointer */
+    instream = sinstr;   /* Unstack input stream */
     return es;
 }
 
@@ -3512,269 +3654,318 @@ int atl_load(fp)
 		      Returns 1 if the statement was part of the
 		      prologue and 0 otherwise. */
 
-int atl_prologue(sp)
-  char *sp;
+int atl_prologue(sp) char *sp;
 {
-    static struct {
-	char *pname;
-	atl_int *pparam;
+    static struct
+    {
+        char *pname;
+        atl_int *pparam;
     } proname[] = {
         {"STACK ", &atl_stklen},
         {"RSTACK ", &atl_rstklen},
         {"HEAP ", &atl_heaplen},
         {"TEMPSTRL ", &atl_ltempstr},
-        {"TEMPSTRN ", &atl_ntempstr}
-    };
+        {"TEMPSTRN ", &atl_ntempstr}};
 
-    if (strncmp(sp, "\\ *", 3) == 0) {
-	int i;
-	char *vp = sp + 3, *ap;
+    if (strncmp(sp, "\\ *", 3) == 0)
+    {
+        int i;
+        char *vp = sp + 3, *ap;
 
-	ucase(vp);
-	for (i = 0; i < ELEMENTS(proname); i++) {
-	    if (strncmp(sp + 3, proname[i].pname,
-		    strlen(proname[i].pname)) == 0) {
-                if ((ap = strchr(sp + 3, ' ')) != NULL) {
+        ucase(vp);
+        for (i = 0; i < ELEMENTS(proname); i++)
+        {
+            if (strncmp(sp + 3, proname[i].pname,
+                        strlen(proname[i].pname)) == 0)
+            {
+                if ((ap = strchr(sp + 3, ' ')) != NULL)
+                {
                     V sscanf(ap + 1, "%li", proname[i].pparam);
 #ifdef PROLOGUEDEBUG
-V printf("Prologue set %sto %ld\n", proname[i].pname, *proname[i].pparam);
+                    V printf("Prologue set %sto %ld\n", proname[i].pname, *proname[i].pparam);
 #endif
-		    return 1;
-	       }
-	    }
-	}
+                    return 1;
+                }
+            }
+        }
     }
     return 0;
 }
 
 /*  ATL_EVAL  --  Evaluate a string containing ATLAST words.  */
 
-int atl_eval(sp)
-  char *sp;
+int atl_eval(sp) char *sp;
 {
     int i;
 
 #undef Memerrs
 #define Memerrs evalstat
     instream = sp;
-    evalstat = ATL_SNORM;	      /* Set normal evaluation status */
+    evalstat = ATL_SNORM; /* Set normal evaluation status */
 #ifdef BREAK
-    broken = False;		      /* Reset asynchronous break */
+    broken = False; /* Reset asynchronous break */
 #endif
 
-/* If automatic prologue processing is configured and we haven't yet
+    /* If automatic prologue processing is configured and we haven't yet
    initialised, check if this is a prologue statement.	If so, execute
    it.	Otherwise automatically initialise with the memory specifications
    currently operative. */
 
 #ifdef PROLOGUE
-    if (dict == NULL) {
-	if (atl_prologue(sp))
-	   return evalstat;
-	atl_init();
+    if (dict == NULL)
+    {
+        if (atl_prologue(sp))
+            return evalstat;
+        atl_init();
     }
 #endif /* PROLOGUE */
 
-    while ((evalstat == ATL_SNORM) && (i = token(&instream)) != TokNull) {
-	dictword *di;
+    while ((evalstat == ATL_SNORM) && (i = token(&instream)) != TokNull)
+    {
+        dictword *di;
 
-	switch (i) {
-	    case TokWord:
-		if (forgetpend) {
-		    forgetpend = False;
-		    ucase(tokbuf);
-		    if ((di = lookup(tokbuf)) != NULL) {
-			dictword *dw = dict;
+        switch (i)
+        {
+        case TokWord:
+            if (forgetpend)
+            {
+                forgetpend = False;
+                ucase(tokbuf);
+                if ((di = lookup(tokbuf)) != NULL)
+                {
+                    dictword *dw = dict;
 
-			/* Pass 1.  Rip through the dictionary to make sure
+                    /* Pass 1.  Rip through the dictionary to make sure
 				    this word is not past the marker that
 				    guards against forgetting too much. */
 
-			while (dw != NULL) {
-			    if (dw == dictprot) {
+                    while (dw != NULL)
+                    {
+                        if (dw == dictprot)
+                        {
 #ifdef MEMMESSAGE
-                                V printf("\nForget protected.\n");
+                            V printf("\nForget protected.\n");
 #endif
-				evalstat = ATL_FORGETPROT;
-				di = NULL;
-			    }
-			    if (strcmp(dw->wname + 1, tokbuf) == 0)
-				break;
-			    dw = dw->wnext;
-			}
+                            evalstat = ATL_FORGETPROT;
+                            di = NULL;
+                        }
+                        if (strcmp(dw->wname + 1, tokbuf) == 0)
+                            break;
+                        dw = dw->wnext;
+                    }
 
-			/* Pass 2.  Walk back through the dictionary
+                    /* Pass 2.  Walk back through the dictionary
 				    items until we encounter the target
                                     of the FORGET.  Release each item's
 				    name buffer and dechain it from the
 				    dictionary list. */
 
-			if (di != NULL) {
-			    do {
-				dw = dict;
-				if (dw->wname != NULL)
-				    free(dw->wname);
-				dict = dw->wnext;
-			    } while (dw != di);
-			    /* Finally, back the heap allocation pointer
+                    if (di != NULL)
+                    {
+                        do
+                        {
+                            dw = dict;
+                            if (dw->wname != NULL)
+                                free(dw->wname);
+                            dict = dw->wnext;
+                        } while (dw != di);
+                        /* Finally, back the heap allocation pointer
 			       up to the start of the last item forgotten. */
-			    hptr = (stackitem *) di;
-			    /* Uhhhh, just one more thing.  If this word
+                        hptr = (stackitem *)di;
+                        /* Uhhhh, just one more thing.  If this word
                                was defined with DOES>, there's a link to
 			       the method address hidden before its
                                wnext field.  See if it's a DOES> by testing
 			       the wcode field for P_dodoes and, if so,
 			       back up the heap one more item. */
-			    if (di->wcode == (codeptr) P_dodoes) {
+                        if (di->wcode == (codeptr)P_dodoes)
+                        {
 #ifdef FORGETDEBUG
-V printf(" Forgetting DOES> word. ");
+                            V printf(" Forgetting DOES> word. ");
 #endif
-				hptr--;
-			    }
-			}
-		    } else {
+                            hptr--;
+                        }
+                    }
+                }
+                else
+                {
 #ifdef MEMMESSAGE
-                        V printf(" '%s' undefined ", tokbuf);
+                    V printf(" '%s' undefined ", tokbuf);
 #endif
-			evalstat = ATL_UNDEFINED;
-		    }
-		} else if (tickpend) {
-		    tickpend = False;
-		    ucase(tokbuf);
-		    if ((di = lookup(tokbuf)) != NULL) {
-			So(1);
-			Push = (stackitem) di; /* Push word compile address */
-		    } else {
+                    evalstat = ATL_UNDEFINED;
+                }
+            }
+            else if (tickpend)
+            {
+                tickpend = False;
+                ucase(tokbuf);
+                if ((di = lookup(tokbuf)) != NULL)
+                {
+                    So(1);
+                    Push = (stackitem)di; /* Push word compile address */
+                }
+                else
+                {
 #ifdef MEMMESSAGE
-                        V printf(" '%s' undefined ", tokbuf);
+                    V printf(" '%s' undefined ", tokbuf);
 #endif
-			evalstat = ATL_UNDEFINED;
-		    }
-		} else if (defpend) {
-		    /* If a definition is pending, define the token and
+                    evalstat = ATL_UNDEFINED;
+                }
+            }
+            else if (defpend)
+            {
+                /* If a definition is pending, define the token and
 		       leave the address of the new word item created for
 		       it on the return stack. */
-		    defpend = False;
-		    ucase(tokbuf);
-		    if (atl_redef && (lookup(tokbuf) != NULL))
-                        V printf("\n%s isn't unique.", tokbuf);
-		    enter(tokbuf);
-		} else {
-		    di = lookup(tokbuf);
-		    if (di != NULL) {
-                        /* Test the state.  If we're interpreting, execute
+                defpend = False;
+                ucase(tokbuf);
+                if (atl_redef && (lookup(tokbuf) != NULL))
+                    V printf("\n%s isn't unique.", tokbuf);
+                enter(tokbuf);
+            }
+            else
+            {
+                di = lookup(tokbuf);
+                if (di != NULL)
+                {
+                    /* Test the state.  If we're interpreting, execute
                            the word in all cases.  If we're compiling,
 			   compile the word unless it is a compiler word
 			   flagged for immediate execution by the
 			   presence of a space as the first character of
 			   its name in the dictionary entry. */
-			if (state &&
-			    (cbrackpend || ctickpend ||
-			     !(di->wname[0] & IMMEDIATE))) {
-			    if (ctickpend) {
-				/* If a compile-time tick preceded this
+                    if (state &&
+                        (cbrackpend || ctickpend ||
+                         !(di->wname[0] & IMMEDIATE)))
+                    {
+                        if (ctickpend)
+                        {
+                            /* If a compile-time tick preceded this
 				   word, compile a (lit) word to cause its
 				   address to be pushed at execution time. */
-				Ho(1);
-				Hstore = s_lit;
-				ctickpend = False;
-			    }
-			    cbrackpend = False;
-			    Ho(1);	  /* Reserve stack space */
-			    Hstore = (stackitem) di;/* Compile word address */
-			} else {
-			    exword(di);   /* Execute word */
-			}
-		    } else {
+                            Ho(1);
+                            Hstore = s_lit;
+                            ctickpend = False;
+                        }
+                        cbrackpend = False;
+                        Ho(1);                  /* Reserve stack space */
+                        Hstore = (stackitem)di; /* Compile word address */
+                    }
+                    else
+                    {
+                        exword(di); /* Execute word */
+                    }
+                }
+                else
+                {
 #ifdef MEMMESSAGE
-                        V printf(" '%s' undefined ", tokbuf);
+                    V printf(" '%s' undefined ", tokbuf);
 #endif
-			evalstat = ATL_UNDEFINED;
-			state = Falsity;
-		    }
-		}
-		break;
+                    evalstat = ATL_UNDEFINED;
+                    state = Falsity;
+                }
+            }
+            break;
 
-	    case TokInt:
-		if (state) {
-		    Ho(2);
-		    Hstore = s_lit;   /* Push (lit) */
-		    Hstore = tokint;  /* Compile actual literal */
-		} else {
-		    So(1);
-		    Push = tokint;
-		}
-		break;
+        case TokInt:
+            if (state)
+            {
+                Ho(2);
+                Hstore = s_lit;  /* Push (lit) */
+                Hstore = tokint; /* Compile actual literal */
+            }
+            else
+            {
+                So(1);
+                Push = tokint;
+            }
+            break;
 
 #ifdef REAL
-	    case TokReal:
-		if (state) {
-		    int i;
-    	    	    union {
-		    	atl_real r;
-			stackitem s[Realsize];
-		    } tru;
+        case TokReal:
+            if (state)
+            {
+                int i;
+                union
+                {
+                    atl_real r;
+                    stackitem s[Realsize];
+                } tru;
 
-		    Ho(Realsize + 1);
-		    Hstore = s_flit;  /* Push (flit) */
-    	    	    tru.r = tokreal;
-		    for (i = 0; i < Realsize; i++) {
-			Hstore = tru.s[i];
-		    }
-		} else {
-		    int i;
-    	    	    union {
-		    	atl_real r;
-			stackitem s[Realsize];
-		    } tru;
+                Ho(Realsize + 1);
+                Hstore = s_flit; /* Push (flit) */
+                tru.r = tokreal;
+                for (i = 0; i < Realsize; i++)
+                {
+                    Hstore = tru.s[i];
+                }
+            }
+            else
+            {
+                int i;
+                union
+                {
+                    atl_real r;
+                    stackitem s[Realsize];
+                } tru;
 
-		    So(Realsize);
-    	    	    tru.r = tokreal;
-		    for (i = 0; i < Realsize; i++) {
-			Push = tru.s[i];
-		    }
-		}
-		break;
+                So(Realsize);
+                tru.r = tokreal;
+                for (i = 0; i < Realsize; i++)
+                {
+                    Push = tru.s[i];
+                }
+            }
+            break;
 #endif /* REAL */
 
 #ifdef STRING
-	    case TokString:
-		if (stringlit) {
-		    stringlit = False;
-		    if (state) {
-			int l = (strlen(tokbuf) + 1 + sizeof(stackitem)) /
-				    sizeof(stackitem);
-			Ho(l);
-			*((char *) hptr) = l;  /* Store in-line skip length */
-			V strcpy(((char *) hptr) + 1, tokbuf);
-			hptr += l;
-		    } else {
-                        V printf("%s", tokbuf);
-		    }
-		} else {
-		    if (state) {
-			int l = (strlen(tokbuf) + 1 + sizeof(stackitem)) /
-				    sizeof(stackitem);
-			Ho(l + 1);
-			/* Compile string literal instruction, followed by
+        case TokString:
+            if (stringlit)
+            {
+                stringlit = False;
+                if (state)
+                {
+                    int l = (strlen(tokbuf) + 1 + sizeof(stackitem)) /
+                            sizeof(stackitem);
+                    Ho(l);
+                    *((char *)hptr) = l; /* Store in-line skip length */
+                    V strcpy(((char *)hptr) + 1, tokbuf);
+                    hptr += l;
+                }
+                else
+                {
+                    V printf("%s", tokbuf);
+                }
+            }
+            else
+            {
+                if (state)
+                {
+                    int l = (strlen(tokbuf) + 1 + sizeof(stackitem)) /
+                            sizeof(stackitem);
+                    Ho(l + 1);
+                    /* Compile string literal instruction, followed by
 			   in-line skip length and the string literal */
-			Hstore = s_strlit;
-			*((char *) hptr) = l;  /* Store in-line skip length */
-			V strcpy(((char *) hptr) + 1, tokbuf);
-			hptr += l;
-		    } else {
-			So(1);
-			V strcpy(strbuf[cstrbuf], tokbuf);
-			Push = (stackitem) strbuf[cstrbuf];
-			cstrbuf = (cstrbuf + 1) % ((int) atl_ntempstr);
-		    }
-		}
-		break;
+                    Hstore = s_strlit;
+                    *((char *)hptr) = l; /* Store in-line skip length */
+                    V strcpy(((char *)hptr) + 1, tokbuf);
+                    hptr += l;
+                }
+                else
+                {
+                    So(1);
+                    V strcpy(strbuf[cstrbuf], tokbuf);
+                    Push = (stackitem)strbuf[cstrbuf];
+                    cstrbuf = (cstrbuf + 1) % ((int)atl_ntempstr);
+                }
+            }
+            break;
 #endif /* STRING */
-	    default:
-                V printf("\nUnknown token type %d\n", i);
-		break;
-	}
+        default:
+            V printf("\nUnknown token type %d\n", i);
+            break;
+        }
     }
     return evalstat;
 }

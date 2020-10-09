@@ -8,16 +8,15 @@
 
 prim P_mnemonic_generate()
 { /* strength dest -- */
-	Sl(1);
+	Sl(2);
 	Hpc(S1);
 	char * res = mnemonic_generate(S0);
-	// fprintf(stdout, "Generating mnemonic");
-	// fprintf(stdout, "Generating mnemonic:\n %s", res);
+	printf("Mnemonic generated: %s", res);
 	V strcpy((char *) S1, res);
-	Pop;
+	Pop2;
 }
 
 struct primfcn crypto_fcns[] = {	
-	{"0??MNE",	P_mnemonic_generate},
+	{"0MNE.GEN",	P_mnemonic_generate},
 	{NULL, (codeptr) 0}
 };

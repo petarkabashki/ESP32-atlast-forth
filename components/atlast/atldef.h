@@ -21,6 +21,9 @@
 #define atldef_h
 
 #define EXPORT
+#define MEMSTAT
+#define TRACE
+
 #include "atlast.h"                   /* Define user linkage structures */
 
 typedef void (*codeptr)();	      /* Machine code pointer */
