@@ -4,7 +4,7 @@
 #include <u8g2.h>
 // #include <stdio.h>
 
-#define V	(void)		      /* Force result to void */
+#include "common.h"
 
 extern u8g2_t u8g2;
 

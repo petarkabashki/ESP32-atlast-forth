@@ -27,6 +27,8 @@
 #include "crypto_atl.h"
 #include "u8g2_atl.h"
 #include "system_atl.h"
+#include "nvs_atl.h"
+// #include "twofish2_atl.h"
 
 #include <u8g2.h>
 
@@ -213,6 +215,8 @@ extern void app_main(void)
     atl_primdef(crypto_fcns);
     atl_primdef(u8g2_fcns);
     atl_primdef(system_fcns);
+    atl_primdef(nvs_fcns);
+    // atl_primdef(twofish2_fcns);
 
     task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);

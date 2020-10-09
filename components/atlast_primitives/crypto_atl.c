@@ -4,7 +4,7 @@
 #include "crypto_atl.h"
 #include <stdio.h>
 
-#define V	(void)		      /* Force result to void */
+#include "common.h"
 
 prim P_mnemonic_generate()
 { /* strength dest -- */

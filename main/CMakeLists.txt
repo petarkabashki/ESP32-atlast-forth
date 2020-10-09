@@ -5,4 +5,4 @@ idf_component_register(SRCS "main.c"
 
 
                     INCLUDE_DIRS "." 
-                    REQUIRES atlast spiffs console vfs fatfs nvs_flash spi_flash crypto u8g2)
+                    REQUIRES atlast spiffs console vfs fatfs nvs_flash spi_flash  crypto u8g2 atlast_primitives)

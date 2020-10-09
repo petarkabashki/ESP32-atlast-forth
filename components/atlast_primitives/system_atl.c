@@ -6,8 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
-
-#define V (void)/* Force result to void */
+#include "common.h"
 
 #define GPIO_PIN_SEL(PIN)  (1ULL<<PIN)
 

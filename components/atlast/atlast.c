@@ -1087,7 +1087,7 @@ prim P_strlit() 		      /* Push address of string literal */
     Skipstring; 		      /* Advance IP past it */
 }
 
-prim P_string() 		      /* Create string buffer */
+Exported prim P_string() 		      /* Create string buffer */
 {
     Sl(1);
     Ho((S0 + 1 + sizeof(stackitem)) / sizeof(stackitem));
