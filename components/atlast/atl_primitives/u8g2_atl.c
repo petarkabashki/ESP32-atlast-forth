@@ -19,14 +19,13 @@ prim P_u8g2_ClearBuffer()
 }
 
 prim P_u8g2_DrawStr()
-{ // xpos ypos test --
+{ // xpos ypos text --
 	Sl(3);
 	Hpc(S0);
 	
 	u8g2_DrawStr(&u8g2, S2, S1, (char*)S0);
 
-	Pop2;
-	Pop;
+	Npop(3);
 }
 
 

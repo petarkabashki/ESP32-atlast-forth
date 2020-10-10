@@ -24,9 +24,10 @@
 #include "nvs_flash.h"
 
 #include "atlast.h"
-#include "crypto_atl.h"
-#include "u8g2_atl.h"
-#include "system_atl.h"
+#include "atl_primitives/crypto_atl.h"
+#include "atl_primitives/u8g2_atl.h"
+#include "atl_primitives/system_atl.h"
+#include "atl_primitives/aescrypt_atl.h"
 
 #include <u8g2.h>
 
@@ -62,9 +63,9 @@ static void initialize_console(void)
     setvbuf(stdin, NULL, _IONBF, 0);
 
     /* Minicom, screen, idf_monitor send CR when ENTER key is pressed */
-    // esp_vfs_dev_uart_set_rx_line_endings(ESP_LINE_ENDINGS_CR);
+    esp_vfs_dev_uart_set_rx_line_endings(ESP_LINE_ENDINGS_CR);
     // /* Move the caret to the beginning of the next line on '\n' */
-    // esp_vfs_dev_uart_set_tx_line_endings(ESP_LINE_ENDINGS_CRLF);
+    esp_vfs_dev_uart_set_tx_line_endings(ESP_LINE_ENDINGS_CR);
 
     /* Configure UART. Note that REF_TICK is used so that the baud rate remains
      * correct while APB frequency is changing in light sleep mode.
@@ -190,9 +191,9 @@ static void atlast_task(void *arg)
     {
         // SSD1306_DrawText(10, 10, line, 1);
         // SSD1306_Display();
-        printf("\n");
+        // printf("\n");
         atl_eval(line);
-        printf("\n");
+        // printf("\n");
         vTaskDelay(10);
     }
 }
@@ -213,6 +214,7 @@ extern void app_main(void)
     atl_primdef(crypto_fcns);
     atl_primdef(u8g2_fcns);
     atl_primdef(system_fcns);
+    atl_primdef(aescrypt_fcns);
 
     task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);
