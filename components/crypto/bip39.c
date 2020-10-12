@@ -46,7 +46,7 @@ static CONFIDENTIAL struct {
 
 #endif
 
-extern const char *mnemonic_generate(int strength) {
+const char *mnemonic_generate(int strength) {
   if (strength % 32 || strength < 128 || strength > 256) {
     return 0;
   }

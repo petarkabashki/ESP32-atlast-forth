@@ -30,7 +30,7 @@
 #define BIP39_WORDS 2048
 #define BIP39_PBKDF2_ROUNDS 2048
 
-extern const char *mnemonic_generate(int strength);  // strength in bits
+const char *mnemonic_generate(int strength);  // strength in bits
 const char *mnemonic_from_data(const uint8_t *data, int len);
 void mnemonic_clear(void);
 

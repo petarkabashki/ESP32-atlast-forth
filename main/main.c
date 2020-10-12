@@ -14,25 +14,33 @@
 #include "esp_log.h"
 #include "esp_spiffs.h"
 #include "esp_log.h"
-#include "esp_console.h"
 #include "esp_vfs_dev.h"
 #include "driver/uart.h"
-#include "linenoise/linenoise.h"
+#include "driver/gpio.h"
 
 #include "esp_vfs_fat.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 
 #include "atlast.h"
-#include "atl_primitives/crypto_atl.h"
 #include "atl_primitives/u8g2_atl.h"
 #include "atl_primitives/system_atl.h"
-#include "atl_primitives/aescrypt_atl.h"
+#include "atl_primitives/crypto_atl.h"
 
 #include <u8g2.h>
 
 #include "sdkconfig.h"
 #include "u8g2_esp32_hal.h"
+
+
+// #define ECHO_TEST_TXD (CONFIG_EXAMPLE_UART_TXD)
+// #define ECHO_TEST_RXD (CONFIG_EXAMPLE_UART_RXD)
+// #define ECHO_TEST_RTS (UART_PIN_NO_CHANGE)
+// #define ECHO_TEST_CTS (UART_PIN_NO_CHANGE)
+#define BUF_SIZE (1024)
+#define ECHO_UART_PORT_NUM (CONFIG_ESP_CONSOLE_UART_NUM)
+#define ECHO_UART_BAUD_RATE (CONFIG_ESP_CONSOLE_UART_BAUDRATE)
+// #define ECHO_TASK_STACK_SIZE (CONFIG_EXAMPLE_TASK_STACK_SIZE)
 
 // SDA - GPIO21
 #define PIN_SDA 21
@@ -53,61 +61,47 @@ static void initialize_nvs(void)
     ESP_ERROR_CHECK(err);
 }
 
-static void initialize_console(void)
+static void config_uart()
 {
-    /* Drain stdout before reconfiguring it */
     fflush(stdout);
     fsync(fileno(stdout));
 
     /* Disable buffering on stdin */
     setvbuf(stdin, NULL, _IONBF, 0);
 
-    /* Minicom, screen, idf_monitor send CR when ENTER key is pressed */
-    esp_vfs_dev_uart_set_rx_line_endings(ESP_LINE_ENDINGS_CR);
-    // /* Move the caret to the beginning of the next line on '\n' */
-    esp_vfs_dev_uart_set_tx_line_endings(ESP_LINE_ENDINGS_CR);
-
-    /* Configure UART. Note that REF_TICK is used so that the baud rate remains
-     * correct while APB frequency is changing in light sleep mode.
-     */
-    const uart_config_t uart_config = {
-        .baud_rate = CONFIG_ESP_CONSOLE_UART_BAUDRATE,
+    /* Configure parameters of an UART driver,
+     * communication pins and install the driver */
+    uart_config_t uart_config = {
+        .baud_rate = ECHO_UART_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
-        .source_clk = UART_SCLK_REF_TICK,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_APB,
     };
-    /* Install UART driver for interrupt-driven reads and writes */
-    ESP_ERROR_CHECK(uart_driver_install(CONFIG_ESP_CONSOLE_UART_NUM,
-                                        256, 0, 0, NULL, 0));
-    ESP_ERROR_CHECK(uart_param_config(CONFIG_ESP_CONSOLE_UART_NUM, &uart_config));
+    int intr_alloc_flags = 0;
+
+#if CONFIG_UART_ISR_IN_IRAM
+    intr_alloc_flags = ESP_INTR_FLAG_IRAM;
+#endif
+
+    ESP_ERROR_CHECK(uart_driver_install(ECHO_UART_PORT_NUM, BUF_SIZE * 2, 0, 0, NULL, intr_alloc_flags));
+    ESP_ERROR_CHECK(uart_param_config(ECHO_UART_PORT_NUM, &uart_config));
+    // ESP_ERROR_CHECK(uart_set_pin(ECHO_UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
 
     /* Tell VFS to use UART driver */
     esp_vfs_dev_uart_use_driver(CONFIG_ESP_CONSOLE_UART_NUM);
-
-    linenoiseSetDumbMode(1);
-
-    /* Initialize the console */
-    //     esp_console_config_t console_config = {
-    //         .max_cmdline_length = 256,
-    //         .max_cmdline_args = 0,
-    // #if CONFIG_LOG_COLORS
-    //         .hint_color = atoi(LOG_COLOR_CYAN)
-    // #endif
-    //     };
-    //     ESP_ERROR_CHECK(esp_console_init(&console_config));
 }
 
-void initialize_spiffs()
+static void initialize_spiffs()
 {
-
     ESP_LOGI(TAG, "Initializing SPIFFS");
 
     esp_vfs_spiffs_conf_t conf = {
         .base_path = "/spiffs",
         .partition_label = NULL,
         .max_files = 5,
-        .format_if_mount_failed = true};
+        .format_if_mount_failed = false};
 
     // Use settings defined above to initialize and mount SPIFFS filesystem.
     // Note: esp_vfs_spiffs_register is an all-in-one convenience function.
@@ -131,7 +125,7 @@ void initialize_spiffs()
     }
 
     size_t total = 0, used = 0;
-    ret = esp_spiffs_info(conf.partition_label, &total, &used);
+    ret = esp_spiffs_info(NULL, &total, &used);
     if (ret != ESP_OK)
     {
         ESP_LOGE(TAG, "Failed to get SPIFFS partition information (%s)", esp_err_to_name(ret));
@@ -140,6 +134,10 @@ void initialize_spiffs()
     {
         ESP_LOGI(TAG, "Partition size: total: %d, used: %d", total, used);
     }
+
+    // // All done, unmount partition and disable SPIFFS
+    // esp_vfs_spiffs_unregister(NULL);
+    // ESP_LOGI(TAG, "SPIFFS unmounted");
 }
 
 u8g2_t u8g2;
@@ -183,19 +181,29 @@ void task_SSD1306i2c(void *ignore)
     // vTaskDelete(NULL);
 }
 
+static char buf[256];
+
 static void atlast_task(void *arg)
 {
 
-    char *line;
-    while ((line = linenoise("OK> ")) != NULL)
-    {
-        // SSD1306_DrawText(10, 10, line, 1);
-        // SSD1306_Display();
-        // printf("\n");
-        atl_eval(line);
-        // printf("\n");
-        vTaskDelay(10);
-    }
+
+	uint8_t l = 0;
+
+	for(;;) {
+		int c = getchar();
+		// putchar(c);
+		if(c == 10 || c == 13 || c == 32) {
+            atl_eval(buf);
+			// zf_result r = zf_eval(buf);
+			// if(r != ZF_OK) puts("A");
+			l = 0;
+		} else if(l < sizeof(buf)-1) {
+			buf[l++] = c;
+		}
+
+		buf[l] = '\0';
+	}
+
 }
 
 /*
@@ -206,26 +214,18 @@ static void atlast_task(void *arg)
 
 extern void app_main(void)
 {
-    initialize_nvs();
+    // initialize_nvs();
     initialize_spiffs();
-    initialize_console();
+    config_uart();
 
     atl_init();
-    atl_primdef(crypto_fcns);
     atl_primdef(u8g2_fcns);
     atl_primdef(system_fcns);
-    atl_primdef(aescrypt_fcns);
+    atl_primdef(crypto_fcns);
 
     task_SSD1306i2c(NULL);
     // xTaskCreate(task_SSD1306i2c, "task_SSD1306i2c", 512, NULL, 10, NULL);
 
-    int a = 0;
-    while (1)
-    {
-        a++;
+    atlast_task(NULL);
 
-        atlast_task(NULL);
-        
-    }
-    // xTaskCreate(atlast_task, "atlast_task", 512, NULL, 10, NULL);
 }
