@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bip32.h"
+#include "base32.h"
 
 #define V (void)/* Force result to void */
 
@@ -214,7 +215,6 @@ prim P_hdnode_sign_digest()
 // 	Push = res;
 // }
 
-
 prim P_hdnode_deserialize_public()
 { /* str version curve node fingerprint -- res*/
 	Sl(5);
@@ -223,10 +223,10 @@ prim P_hdnode_deserialize_public()
 	Hpc(S2);
 	Hpc(S4);
 	int res = hdnode_deserialize_public(/*const char *str*/ (const char *)S4,
-								 /*uint32_t version*/ S3,
-								 /*const char *curve*/ (const char *)S2,
-								 /*HDNode *node*/ (HDNode *)S1,
-								 /*uint32_t *fingerprint*/ (uint32_t *)S0);
+										/*uint32_t version*/ S3,
+										/*const char *curve*/ (const char *)S2,
+										/*HDNode *node*/ (HDNode *)S1,
+										/*uint32_t *fingerprint*/ (uint32_t *)S0);
 
 	Npop(5);
 	Push = res;
@@ -240,15 +240,14 @@ prim P_hdnode_deserialize_private()
 	Hpc(S2);
 	Hpc(S4);
 	int res = hdnode_deserialize_private(/*const char *str*/ (const char *)S4,
-								 /*uint32_t version*/ S3,
-								 /*const char *curve*/ (const char *)S2,
-								 /*HDNode *node*/ (HDNode *)S1,
-								 /*uint32_t *fingerprint*/ (uint32_t *)S0);
+										 /*uint32_t version*/ S3,
+										 /*const char *curve*/ (const char *)S2,
+										 /*HDNode *node*/ (HDNode *)S1,
+										 /*uint32_t *fingerprint*/ (uint32_t *)S0);
 
 	Npop(5);
 	Push = res;
 }
-
 
 prim P_hdnode_serialize_private()
 { /* node fingerprint version str strsize -- res*/
@@ -258,10 +257,10 @@ prim P_hdnode_serialize_private()
 	Hpc(S2);
 	Hpc(S4);
 	int res = hdnode_serialize_private(/*HDNode *node*/ (HDNode *)S4,
-								 /*uint32_t fingerprint*/ (int)S3,
-								 /*uint32_t version*/ S2,
-								 /*char *str*/ (char *)S1,
-								 /*int strsize*/S0);
+									   /*uint32_t fingerprint*/ (int)S3,
+									   /*uint32_t version*/ S2,
+									   /*char *str*/ (char *)S1,
+									   /*int strsize*/ S0);
 
 	Npop(5);
 	Push = res;
@@ -275,30 +274,105 @@ prim P_hdnode_serialize_public()
 	Hpc(S2);
 	Hpc(S4);
 	int res = hdnode_serialize_public(/*HDNode *node*/ (HDNode *)S4,
-								 /*uint32_t fingerprint*/ (int )S3,
-								 /*uint32_t version*/ S2,
-								 /*char *str*/ (char *)S1,
-								 /*int strsize*/S0);
+									  /*uint32_t fingerprint*/ (int)S3,
+									  /*uint32_t version*/ S2,
+									  /*char *str*/ (char *)S1,
+									  /*int strsize*/ S0);
 
 	Npop(5);
 	Push = res;
 }
 
+prim P_hdnode_get_shared_key()
+{ /* node peer_public_key session_key result_size -- res*/
+	Sl(4);
+	Hpc(S0);
+	Hpc(S1);
+	Hpc(S2);
+	Hpc(S3);
+	int res = hdnode_get_shared_key(/*const HDNode *node*/ (const HDNode *)S3,
+									/*const uint8_t *peer_public_key*/ (const uint8_t *)S2,
+									/*uint8_t *session_key*/ (uint8_t *)S1,
+									/*int *result_size*/ (int *)S0);
+
+	Npop(4);
+	Push = res;
+}
+/////////////////////////////////////
+// BASE32
+
+prim P_base32_encode()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(5);
+	Hpc(S0);
+	Hpc(S2);
+	Hpc(S4);
+	Hpc(S5);
+	char *res = base32_encode(/*const uint8_t *in*/ (const uint8_t *)S4,
+							  /*size_t inlen*/ (size_t)S3,
+							  /*char *out*/ (char *)S2,
+							  /*size_t outlen*/ (size_t)S1,
+							  /*const char *alphabet*/ (const char *)S0);
+	strcpy((char*)S5, res);
+	Npop(5);
+}
 
 
+prim P_base32_decode()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(5);
+	Hpc(S0);
+	Hpc(S2);
+	Hpc(S4);
+	Hpc(S5);
+	uint8_t *res = base32_decode(/*const char *in*/ (const char *)S4,
+							  /*size_t inlen*/ (size_t)S3,
+							  /*uint8_t *out*/ (uint8_t *)S2,
+							  /*size_t outlen*/ (size_t)S1,
+							  /*const char *alphabet*/ (const char *)S0);
+	memcpy((uint8_t*)S5, res, (size_t)S1);
+	Npop(5);
+}
 
-// prim P_hdnode_get_shared_key()
-// { /* node peer_public_key session_key result_size -- res*/
-// 	Sl(4);
-// 	Hpc(S0);Hpc(S1);Hpc(S2);Hpc(S3);
-// 	int res = hdnode_get_shared_key(const HDNode *node,
-// 	const uint8_t *peer_public_key,
-//                           uint8_t *session_key,
-// 						  int *result_size);
 
-// 	Npop(4);
-// 	Push = res;
-// }
+prim P_base32_decode_unsafe()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(4);
+	Hpc(S0);
+	Hpc(S1);
+	Hpc(S3);
+	bool res = base32_decode_unsafe(/*const uint8_t *in*/ (const uint8_t *)S3,
+							  /*size_t inlen*/ (size_t)S2,
+							  /*char *out*/ (uint8_t *)S1,
+							  /*const char *alphabet*/ (const char *)S0);
+
+	Npop(4);
+	Push = res;
+}
+
+prim P_base32_encode_unsafe()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(3);
+	Hpc(S1);
+	Hpc(S2);
+	V base32_encode_unsafe(/*const uint8_t *in*/ (const uint8_t *)S2,
+							  /*size_t inlen*/ (size_t)S1,
+							  /*uint8_t *out*/ (uint8_t *)S0);
+	Npop(3);
+}
+
+
+prim P_base32_encoded_length()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(1);
+	S0 = base32_encoded_length(S0);
+}
+
+prim P_base32_decoded_length()
+{ /* res in inlen out outlen alphabet -- */
+	Sl(1);
+	S0 = base32_decoded_length(S0);
+}
 
 struct primfcn crypto_fcns[] = {
 	{"0MNE.GEN", P_mnemonic_generate},
@@ -314,6 +388,7 @@ struct primfcn crypto_fcns[] = {
 	{"0HND.PBCKD", P_hdnode_public_ckd},
 	{"0HND.FILL-PBK", P_hdnode_fill_public_key},
 	{"0HND.ADDR", P_hdnode_get_address},
+	{"0HND.SHRK", P_hdnode_get_shared_key},
 	{"0HND.SIGN", P_hdnode_sign},
 	{"0HND.SIGN-DIG", P_hdnode_sign_digest},
 	{"0HND.SRL-PBL", P_hdnode_serialize_public},
@@ -321,5 +396,12 @@ struct primfcn crypto_fcns[] = {
 	// {"0HND.DSRLZ", P_hdnode_deserialize},
 	{"0HND.DSR-PBL", P_hdnode_deserialize_public},
 	{"0HND.DSR-PRV", P_hdnode_deserialize_private},
+	
+	{"0B32.ENC", P_base32_encode},
+	{"0B32.DEC", P_base32_decode},
+	{"0B32.ENC-UNS", P_base32_encode_unsafe},
+	{"0B32.DEC-UNS", P_base32_decode_unsafe},
+	{"0B32.ENC-LEN", P_base32_encoded_length},
+	{"0B32.DEC-LEN", P_base32_decoded_length},
 
 	{NULL, (codeptr)0}};
