@@ -1,6 +1,6 @@
-#Atlast Forth running on ESP32-IDF
+# Atlast Forth running on ESP32-IDF
 
-##LCD Oled and atlast crypto integration in progress.
+## LCD Oled and atlast crypto integration in progress.
 
 Linux usb permissions:
 
